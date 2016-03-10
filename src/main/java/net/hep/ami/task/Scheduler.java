@@ -90,7 +90,7 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	private Connection getRouterConnection() throws Exception
+	public Connection getRouterConnection() throws Exception
 	{
 		if(m_connection == null
 		   ||

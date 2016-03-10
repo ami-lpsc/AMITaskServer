@@ -137,6 +137,8 @@ public class Main implements Handler
 
 		m_scheduler = new Scheduler(jdbc_url, router_user, router_pass, server_name, max_tasks, priorityTable);
 
+		m_scheduler.getRouterConnection();
+
 		m_scheduler.start();
 
 		/*-----------------------------------------------------------------*/
