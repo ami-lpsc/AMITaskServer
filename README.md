@@ -1,6 +1,8 @@
 AMITaskServer
 =============
 
+The ATLAS Metadata Interface Task Server (AMITaskServer) is a generic high level task server. It was originally developed for the A Toroidal LHC ApparatuS (ATLAS) experiment, one of the two general-purpose detectors at the Large Hadron Collider (LHC).
+
 Compiling AMITaskServer
 =======================
 
