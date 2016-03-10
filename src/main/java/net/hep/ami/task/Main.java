@@ -157,12 +157,12 @@ public class Main implements Handler
 		{
 			result.append("<rowset type=\"user\">");
 			result.append("<row>");
-			result.append("<field name=\"valid\">true</field>");
-			result.append("<field name=\"AMIUser\">admin</field>");
-			result.append("<field name=\"guestUser\">guest</field>");
-			result.append("<field name=\"lastName\">admin</field>");
-			result.append("<field name=\"firstName\">admin</field>");
-			result.append("<field name=\"email\">none</field>");
+			result.append("<field name=\"valid\"><![CDATA[true]]></field>");
+			result.append("<field name=\"AMIUser\"><![CDATA[admin]]></field>");
+			result.append("<field name=\"guestUser\"><![CDATA[guest]]></field>");
+			result.append("<field name=\"lastName\"><![CDATA[admin]]></field>");
+			result.append("<field name=\"firstName\"><![CDATA[admin]]></field>");
+			result.append("<field name=\"email\"><![CDATA[none]]></field>");
 			result.append("</row>");
 			result.append("</rowset>");
 		}
@@ -189,7 +189,7 @@ public class Main implements Handler
 		}
 
 		/*-----------------------------------------------------------------*/
-		/* Stop                                                            */
+		/* StopServer                                                      */
 		/*-----------------------------------------------------------------*/
 
 		else if(command.equals("StopServer"))
@@ -235,7 +235,7 @@ public class Main implements Handler
 		}
 
 		/*-----------------------------------------------------------------*/
-		/* Stop                                                            */
+		/* StopServer                                                      */
 		/*-----------------------------------------------------------------*/
 
 		else if(command.equals("StopServer"))
