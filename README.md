@@ -19,10 +19,12 @@ mvn -version
 mvn assembly:assembly
 ```
 
+Generated tarball: *target/AMIMini-X.X.X.zip*
+
 Configuring AMITaskServer
 =========================
 
-Example of configuration file (~/.ami/AMI.xml or java -Dami.conffile=path/AMI.xml):
+Example of configuration file (~/.ami/AMI.xml or java -Dami.conffile=path/AMI.xml ...):
 
 	<?xml version="1.0" encoding="ISO-8859-1"?>
 
