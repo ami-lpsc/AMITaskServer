@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <projectDescription>
-  <name>AMITaskServer</name>
-  <comment></comment>
-  <projects>
-    <project>AMIMini</project>
-  </projects>
-  <buildSpec>
-    <buildCommand>
-      <name>org.eclipse.jdt.core.javabuilder</name>
-  </buildCommand>
-  </buildSpec>
-  <natures>
-  <nature>org.eclipse.jdt.core.javanature</nature>
-  </natures>
+	<name>AMITaskServer</name>
+	<comment></comment>
+	<projects>
+		<project>AMITaskServer</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.m2e.core.maven2Nature</nature>
+	</natures>
 </projectDescription>
