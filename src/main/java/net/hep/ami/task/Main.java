@@ -171,14 +171,20 @@ public class Main implements Handler
 		/* GetTaskStatus                                                   */
 		/*-----------------------------------------------------------------*/
 
-		else if(command.equals("GetTaskStatus"))
+		else if(command.equals("GetTasksStatus"))
 		{
-			result.append("<rowset type=\"runningTasks\">");
-			for(String task: m_scheduler.getRunningTasks()) result.append("<row><field name=\"task\"><![CDATA[" + task + "]]></field></row>");
-			result.append("</rowset>");
+			result.append("<rowset>");
 
-			result.append("<rowset type=\"pendingTasks\">");
-			for(String task: m_scheduler.getPendingTasks()) result.append("<row><field name=\"task\"><![CDATA[" + task + "]]></field></row>");
+			for(Map<String, String> map: m_scheduler.getTasksStatus())
+			{
+				result.append("<row>")
+				      .append("<field name=\"name\"><![CDATA[" + map.get("name") + "]]></field>")
+				      .append("<field name=\"running\"><![CDATA[" + map.get("running") + "]]></field>")
+				      .append("<field name=\"success\"><![CDATA[" + map.get("success") + "]]></field>")
+				      .append("</row>")
+				;
+			}
+
 			result.append("</rowset>");
 		}
 
@@ -223,7 +229,7 @@ public class Main implements Handler
 		/* GetTaskStatus                                                   */
 		/*-----------------------------------------------------------------*/
 
-		else if(command.equals("GetTaskStatus"))
+		else if(command.equals("GetTasksStatus"))
 		{
 			result.append("Get task status");
 		}

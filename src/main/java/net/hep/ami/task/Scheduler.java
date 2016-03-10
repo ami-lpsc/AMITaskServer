@@ -260,47 +260,32 @@ public class Scheduler extends Thread
 	/*---------------------------------------------------------------------*/
 	/*---------------------------------------------------------------------*/
 
-	public Set<String> getRunningTasks() throws Exception
+	public List<Map<String, String>> getTasksStatus() throws Exception
 	{
-		Set<String> result = new HashSet<String>();
+		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 
 		Connection connection = getRouterConnection();
 		Statement statement = connection.createStatement();
 
 		try
 		{
-			ResultSet resultSet = statement.executeQuery("SELECT name FROM router_task WHERE serverName = '" + m_server_name.replace("'", "''") + "' AND (status & 1) = 1");
+			ResultSet resultSet = statement.executeQuery("SELECT name, status FROM router_task WHERE serverName = '" + m_server_name.replace("'", "''") + "'");
+
+			Map<String, String> map;
+
+			int status;
 
 			while(resultSet.next())
 			{
-				result.add(resultSet.getString(1));
-			}
-		}
-		finally
-		{
-			statement.close();
-		}
+				map = new HashMap<String, String>();
 
-		return result;
-	}
+				status = resultSet.getInt(2);
 
-	/*---------------------------------------------------------------------*/
-	/*---------------------------------------------------------------------*/
+				map.put("name", resultSet.getString(1));
+				map.put("running", Integer.toString((status >> 0) & 0x01));
+				map.put("success", Integer.toString((status >> 1) & 0x01));
 
-	public Set<String> getPendingTasks() throws Exception
-	{
-		Set<String> result = new HashSet<String>();
-
-		Connection connection = getRouterConnection();
-		Statement statement = connection.createStatement();
-
-		try
-		{
-			ResultSet resultSet = statement.executeQuery("SELECT name FROM router_task WHERE serverName = '" + m_server_name.replace("'", "''") + "' AND (status & 1) = 0");
-
-			while(resultSet.next())
-			{
-				result.add(resultSet.getString(1));
+				result.add(map);
 			}
 		}
 		finally
