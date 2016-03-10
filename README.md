@@ -19,7 +19,7 @@ mvn -version
 mvn assembly:assembly
 ```
 
-Generated tarball: *target/AMITaskServer-X.X.X-tarball.zip*
+Generated tarball: *target/AMITaskServer-X.X.X-bundle.zip*
 
 Configuring AMITaskServer
 =========================
