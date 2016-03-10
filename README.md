@@ -37,12 +37,12 @@ Example of configuration file (~/.ami/AMI.xml or java -Dami.conffile=path/AMI.xm
 Using AMITaskServer
 ===================
 
-	AMITaskServer --help
-	AMITaskServer status
-	AMITaskServer start
-	AMITaskServer stop
+	./AMITaskServer --help
+	./AMITaskServer status
+	./AMITaskServer start
+	./AMITaskServer stop
 
 Use as Linux Service
 ====================
 
-	installAMITaskServer.sh
+	./installAMITaskServer.sh
