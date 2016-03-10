@@ -24,7 +24,7 @@ Generated standalone bundle: *target/AMITaskServer-X.X.X-bundle.zip*
 Configuring AMITaskServer
 =========================
 
-Example of configuration file (~/.ami/AMI.xml or java -Dami.conffile=path/AMI.xml ...):
+Example of configuration file (~/.ami/AMI.xml, /etc/ami/AMI.xml or java -Dami.conffile=path/AMI.xml ...):
 
 	<?xml version="1.0" encoding="ISO-8859-1"?>
 
