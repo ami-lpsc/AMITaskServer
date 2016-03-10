@@ -186,7 +186,7 @@ public class Main implements Handler
 		/* Stop                                                            */
 		/*-----------------------------------------------------------------*/
 
-		else if(command.equals("Stop"))
+		else if(command.equals("StopServer"))
 		{
 			result.append("<info>done with success</info>");
 
@@ -232,7 +232,7 @@ public class Main implements Handler
 		/* Stop                                                            */
 		/*-----------------------------------------------------------------*/
 
-		else if(command.equals("Stop"))
+		else if(command.equals("StopServer"))
 		{
 			result.append("Stop the server");
 		}
