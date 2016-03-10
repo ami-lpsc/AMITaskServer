@@ -1,6 +1,5 @@
 package net.hep.ami.task;
 
-import java.io.*;
 import java.sql.*;
 import java.util.*;
 import java.util.Map.*;
@@ -52,9 +51,11 @@ public class Scheduler extends Thread
 		{
 			removeAllTasks();
 		}
-		catch(SQLException e)
+		catch(Exception e)
 		{
-			e.printStackTrace();
+			System.err.println(
+				e.getMessage()
+			);
 		}
 
 		Random random = new Random();
@@ -76,9 +77,11 @@ public class Scheduler extends Thread
 					startTask(random);
 				}
 			}
-			catch(SQLException | IOException e)
+			catch(Exception e)
 			{
-				e.printStackTrace();
+				System.err.println(
+					e.getMessage()
+				);
 			}
 
 			/*-------------------------------------------------------------*/
@@ -87,7 +90,7 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	private Connection getRouterConnection() throws SQLException
+	private Connection getRouterConnection() throws Exception
 	{
 		if(m_connection == null
 		   ||
@@ -107,7 +110,7 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	private void removeAllTasks() throws SQLException
+	private void removeAllTasks() throws Exception
 	{
 		/*-----------------------------------------------------------------*/
 
@@ -135,7 +138,7 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	private void removeFinishTasks() throws SQLException
+	private void removeFinishTasks() throws Exception
 	{
 		/*-----------------------------------------------------------------*/
 
@@ -197,7 +200,7 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	private void startTask(Random random) throws SQLException, IOException
+	private void startTask(Random random) throws Exception
 	{
 		int i = 0;
 

@@ -266,7 +266,9 @@ public class Main implements Handler
 		}
 		catch(Exception e)
 		{
-			System.err.println(e.getMessage());
+			System.err.println(
+				e.getMessage()
+			);
 
 			System.exit(1);
 		}
