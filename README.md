@@ -34,17 +34,13 @@ Example of configuration file (~/.ami/AMI.xml or java -Dami.conffile=path/AMI.xm
 	  <property name="server_name"><![CDATA[server_name]]></property>
 	</properties>
 
-Running AMITaskServer
-=====================
+Using AMITaskServer
+===================
 
 	```bash
+AMITaskServer --help
+AMITaskServer status
 AMITaskServer start
-```
-
-Stopping AMITaskServer
-=====================
-
-	```bash
 AMITaskServer stop
 ```
 
