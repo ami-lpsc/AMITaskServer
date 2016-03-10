@@ -21,14 +21,12 @@ if [[ -z $(ps -ef | grep "net\.hep\.ami\.task\.Main") ]]
 then
   ###########################################################################
 
-  AMICLASSPATH=''
+  AMICLASSPATH=$AMI_HOME/classes
 
   for jar in $AMI_HOME/lib/*.jar
   do
-    AMICLASSPATH=$jar${AMICLASSPATH:+:$AMICLASSPATH}
+    AMICLASSPATH=$AMICLASSPATH:$jar
   done
-
-  export CLASSPATH=$AMI_HOME/classes:$AMICLASSPATH${CLASSPATH:+:$CLASSPATH}
 
   ###########################################################################
 
@@ -39,7 +37,7 @@ then
 
   ###########################################################################
 
-  $JAVA_HOME/bin/java -Xms$JAVA_MIN_RAM -Xmx$JAVA_MAX_RAM -Djsse.enableSNIExtension=false -Dami.conffile=$AMI_HOME/AMI.xml net.hep.ami.task.Main &> $AMI_HOME/log/AMITaskServer.out &
+  $JAVA_HOME/bin/java -Xms$JAVA_MIN_RAM -Xmx$JAVA_MAX_RAM -Dami.conffile=$AMI_HOME/AMI.xml -classpath $AMICLASSPATH net.hep.ami.task.Main &> $AMI_HOME/log/AMITaskServer.out &
 
   ###########################################################################
 fi

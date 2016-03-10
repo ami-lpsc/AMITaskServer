@@ -13,7 +13,7 @@ AMI_HOME=$(cd $(dirname $THIS_SCRIPT) && pwd)
 
 #############################################################################
 
-curl http://localhost:9090/?Command=StopServer
+curl http://localhost:1357/?Command=StopServer &> /dev/null
 
 #############################################################################
 
