@@ -42,7 +42,7 @@ Using AMITaskServer
 	./AMITaskServer start
 	./AMITaskServer stop
 
-Use as Linux Service
-====================
+Install Linux Service
+=====================
 
 	./installAMITaskServer.sh
