@@ -22,7 +22,7 @@ mvn assembly:assembly
 Configuring AMITaskServer
 =========================
 
-Example of configuration file (~/.ami/AMI.xml):
+Example of configuration file (~/.ami/AMI.xml or java -Dami.conffile=path/AMI.xml):
 
 	<?xml version="1.0" encoding="ISO-8859-1"?>
 
@@ -33,3 +33,24 @@ Example of configuration file (~/.ami/AMI.xml):
 
 	  <property name="server_name"><![CDATA[server_name]]></property>
 	</properties>
+
+Running AMITaskServer
+=====================
+
+	```bash
+AMITaskServer start
+```
+
+Stopping AMITaskServer
+=====================
+
+	```bash
+AMITaskServer stop
+```
+
+Use as Linux Service
+====================
+
+	```bash
+installAMITaskServer.sh
+```
