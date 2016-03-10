@@ -16,7 +16,7 @@ mvn -version
 
 2. Compiling sources
 	```bash
-mvn install
+mvn assembly:assembly
 ```
 
 Configuring AMITaskServer
