@@ -6,7 +6,7 @@ The ATLAS Metadata Interface Task Server (AMITaskServer) is a generic high level
 Compiling AMITaskServer
 =======================
 
-1. Requierments
+1. Requirements
 
   Make sure that [Java 8](http://www.oracle.com/technetwork/java/javase/), [Maven 3](http://maven.apache.org/) and [*AMIMini*](https://github.com/ami-lpsc/AMIMini/) are installed:
 	```bash

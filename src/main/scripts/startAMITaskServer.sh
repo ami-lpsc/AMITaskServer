@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-export JAVA_HOME=/usr/local/java
+export JAVA_HOME=/usr
 JAVA_MIN_RAM=512M
 JAVA_MAX_RAM=2G
 
