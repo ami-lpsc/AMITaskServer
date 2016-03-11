@@ -229,7 +229,7 @@ public class Scheduler extends Thread
 			for(String taskId: toBeRemoved)
 			{
 				status = m_runningTaskMap.remove(taskId).getStatus();
-System.out.println(status);
+
 				nb = status ? statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 2) WHERE id = '" + taskId + "'")
 				            : statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 0) WHERE id = '" + taskId + "'")
 				;
