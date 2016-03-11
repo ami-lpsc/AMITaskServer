@@ -10,9 +10,7 @@ public class Main implements Handler
 
 	private static final int s_max_tasks_default = 10;
 
-	private static final int s_max_priority_levels_default = 1;
-
-	private static final float s_priority_compression_default = 1.5f;
+	private static final float s_compression_default = 1.5f;
 
 	/*---------------------------------------------------------------------*/
 
@@ -84,62 +82,20 @@ public class Main implements Handler
 
 		/*-----------------------------------------------------------------*/
 
-		s = config.get("max_priority_levels");
+		s = config.get("compression");
 
-		int m_max_priority_levels = (s != null) ? Integer.parseInt(s) : s_max_priority_levels_default;
+		Float compression = (s != null) ? Float.parseFloat(s) : s_compression_default;
 
-		if(m_max_priority_levels < 1)
+		if(compression < 1.0)
 		{
-			throw new Exception("`max_priority_levels` out of range");
-		}
-
-		/*-----------------------------------------------------------------*/
-
-		s = config.get("priority_compression");
-
-		Float m_priority_compression = (s != null) ? Float.parseFloat(s) : s_priority_compression_default;
-
-		if(m_priority_compression < 1.0)
-		{
-			throw new Exception("`priority_compression` out of range");
-		}
-
-		/*-----------------------------------------------------------------*/
-		/* BUILD PRIORITY TABLE                                            */
-		/*-----------------------------------------------------------------*/
-
-		/* dim = 1 + sum_{n=2}^{n=m_max_priority_levels} m_priority_compression * (n - 1)
-		 *     = 1 + m_priority_compression * sum_{n=2}^{n=m_max_priority_levels} (n - 1)
-		 *     = 1 + m_priority_compression * m_max_priority_levels * (m_max_priority_levels - 1) / 2
-		 */
-
-		int[] priorityTable = new int[1 + (int) (m_priority_compression * (m_max_priority_levels * (m_max_priority_levels - 1)) / 2.0f)];
-
-		/*-----------------------------------------------------------------*/
-
-		float number_of_entries = 1;
-
-		int k = priorityTable.length - 1;
-
-		for(int j = 0; j < m_max_priority_levels; j++)
-		{
-			for(int i = 0; i < (int) number_of_entries; i++)
-			{
-				priorityTable[k--] = j;
-			}
-
-			number_of_entries *= m_priority_compression;
+			throw new Exception("`compression` out of range");
 		}
 
 		/*-----------------------------------------------------------------*/
 		/* RUN SCHEDULER                                                   */
 		/*-----------------------------------------------------------------*/
 
-		m_scheduler = new Scheduler(jdbc_url, router_user, router_pass, server_name, max_tasks, priorityTable);
-
-		m_scheduler.getRouterConnection();
-
-		m_scheduler.start();
+		(m_scheduler = new Scheduler(jdbc_url, router_user, router_pass, server_name, max_tasks, compression)).start();
 
 		/*-----------------------------------------------------------------*/
 	}
@@ -151,22 +107,25 @@ public class Main implements Handler
 	{
 		StringBuilder result = new StringBuilder();
 
+		result.append("<info><![CDATA[Done with success]]></info>");
+
 		/*-----------------------------------------------------------------*/
 		/* GetSessionInfo                                                  */
 		/*-----------------------------------------------------------------*/
 
 		/**/ if(command.equals("GetSessionInfo"))
 		{
-			result.append("<rowset type=\"user\">");
-			result.append("<row>");
-			result.append("<field name=\"valid\"><![CDATA[true]]></field>");
-			result.append("<field name=\"AMIUser\"><![CDATA[admin]]></field>");
-			result.append("<field name=\"guestUser\"><![CDATA[guest]]></field>");
-			result.append("<field name=\"lastName\"><![CDATA[admin]]></field>");
-			result.append("<field name=\"firstName\"><![CDATA[admin]]></field>");
-			result.append("<field name=\"email\"><![CDATA[none]]></field>");
-			result.append("</row>");
-			result.append("</rowset>");
+			result.append("<rowset type=\"user\">")
+			      .append("<row>")
+			      .append("<field name=\"valid\"><![CDATA[true]]></field>")
+			      .append("<field name=\"AMIUser\"><![CDATA[admin]]></field>")
+			      .append("<field name=\"guestUser\"><![CDATA[guest]]></field>")
+			      .append("<field name=\"lastName\"><![CDATA[admin]]></field>")
+			      .append("<field name=\"firstName\"><![CDATA[admin]]></field>")
+			      .append("<field name=\"email\"><![CDATA[none]]></field>")
+			      .append("</row>")
+			      .append("</rowset>")
+			;
 		}
 
 		/*-----------------------------------------------------------------*/
@@ -180,7 +139,9 @@ public class Main implements Handler
 			for(Map<String, String> map: m_scheduler.getTasksStatus())
 			{
 				result.append("<row>")
+				      .append("<field name=\"id\"><![CDATA[" + map.get("id") + "]]></field>")
 				      .append("<field name=\"name\"><![CDATA[" + map.get("name") + "]]></field>")
+				      .append("<field name=\"description\"><![CDATA[" + map.get("description") + "]]></field>")
 				      .append("<field name=\"running\"><![CDATA[" + map.get("running") + "]]></field>")
 				      .append("<field name=\"success\"><![CDATA[" + map.get("success") + "]]></field>")
 				      .append("</row>")
@@ -196,8 +157,6 @@ public class Main implements Handler
 
 		else if(command.equals("StopServer"))
 		{
-			result.append("<info>done with success</info>");
-
 			server.gracefulStop();
 		}
 
@@ -205,7 +164,7 @@ public class Main implements Handler
 
 		else
 		{
-			result.append("<error>command not found</error>");
+			throw new Exception("Command not found");
 		}
 
 		return result;
@@ -249,7 +208,7 @@ public class Main implements Handler
 
 		else
 		{
-			result.append("<error>command not found</error>");
+			throw new Exception("Command not found");
 		}
 
 		return result;

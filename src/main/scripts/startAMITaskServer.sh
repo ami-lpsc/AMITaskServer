@@ -1,8 +1,6 @@
 #!/bin/bash
 
 export JAVA_HOME=/usr
-JAVA_MIN_RAM=512M
-JAVA_MAX_RAM=2G
 
 #############################################################################
 
@@ -37,7 +35,7 @@ then
 
   ###########################################################################
 
-  $JAVA_HOME/bin/java -Xms$JAVA_MIN_RAM -Xmx$JAVA_MAX_RAM -Dami.conffile=$AMI_HOME/AMI.xml -classpath $AMICLASSPATH net.hep.ami.task.Main &> $AMI_HOME/log/AMITaskServer.out &
+  $JAVA_HOME/bin/java -Dami.conffile=$AMI_HOME/AMI.xml -classpath $AMICLASSPATH net.hep.ami.task.Main &> $AMI_HOME/log/AMITaskServer.out &
 
   ###########################################################################
 fi
