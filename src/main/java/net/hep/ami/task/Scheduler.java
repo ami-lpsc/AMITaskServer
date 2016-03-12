@@ -423,6 +423,7 @@ public class Scheduler extends Thread
 					id = resultSet.getString(1);
 					name = resultSet.getString(2);
 					description = resultSet.getString(3);
+
 					status = resultSet.getInt(4);
 
 					map = new HashMap<String, String>();
