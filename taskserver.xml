@@ -22,6 +22,16 @@
     <!--******************************************************************-->
 
     <fileSet>
+      <directory>${project.basedir}</directory>
+      <outputDirectory></outputDirectory>
+      <includes>
+        <include>LICENSE</include>
+      </includes>
+    </fileSet>
+
+    <!--******************************************************************-->
+
+    <fileSet>
       <directory>${project.build.scriptSourceDirectory}</directory>
       <outputDirectory></outputDirectory>
       <includes>

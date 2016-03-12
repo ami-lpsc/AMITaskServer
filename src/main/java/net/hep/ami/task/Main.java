@@ -10,7 +10,7 @@ public class Main implements Handler
 
 	private static final int s_max_tasks_default = 10;
 
-	private static final float s_compression_default = 1.5f;
+	private static final float s_compression_default = 2.0f;
 
 	/*---------------------------------------------------------------------*/
 

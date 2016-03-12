@@ -1,5 +1,7 @@
 #!/bin/bash
 
+PORT=1357
+
 #############################################################################
 
 THIS_SCRIPT=${BASH_SOURCE[0]:-$0}
@@ -13,7 +15,7 @@ AMI_HOME=$(cd $(dirname $THIS_SCRIPT) && pwd)
 
 #############################################################################
 
-curl http://localhost:1357/?Command=StopServer &> /dev/null
+curl http://localhost:$PORT/?Command=StopServer &> /dev/null
 
 #############################################################################
 

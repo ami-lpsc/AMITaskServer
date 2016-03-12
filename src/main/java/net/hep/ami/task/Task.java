@@ -7,13 +7,13 @@ public class Task
 {
 	/*---------------------------------------------------------------------*/
 
-	private Process m_process;
-
-	private Set<String> m_lockNames;
+	private static final boolean s_isWindows = System.getProperty("os.name").startsWith("Windows");
 
 	/*---------------------------------------------------------------------*/
 
-	private static final boolean s_isWindows = System.getProperty("os.name").toLowerCase().indexOf("windows") >= 0;
+	private Process m_process;
+
+	private Set<String> m_lockNames;
 
 	/*---------------------------------------------------------------------*/
 

@@ -12,7 +12,7 @@ public class PriorityTableBuilder
 
 		/*-----------------------------------------------------------------*/
 
-		float priorityMultiplicity = 1;
+		float priorityMultiplicity = 1.0f;
 
 		for(int i = 0; i < priorityNumber; i++)
 		{
