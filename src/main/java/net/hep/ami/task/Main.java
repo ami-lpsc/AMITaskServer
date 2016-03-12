@@ -1,6 +1,7 @@
 package net.hep.ami.task;
 
 import java.util.*;
+import java.util.regex.*;
 
 import net.hep.ami.mini.*;
 
@@ -11,6 +12,8 @@ public class Main implements Handler
 	private static final int s_max_tasks_default = 10;
 
 	private static final float s_compression_default = 2.0f;
+
+	private static final Pattern s_ipSplitPattern = Pattern.compile("[^0-9\\.]");
 
 	/*---------------------------------------------------------------------*/
 
@@ -134,6 +137,8 @@ public class Main implements Handler
 
 		else if(command.equals("GetTasksStatus"))
 		{
+			checkIP(config, ip);
+
 			result.append("<rowset>");
 
 			for(Map<String, String> map: m_scheduler.getTasksStatus())
@@ -157,6 +162,8 @@ public class Main implements Handler
 
 		else if(command.equals("StopServer"))
 		{
+			checkIP(config, ip);
+
 			server.gracefulStop();
 		}
 
@@ -192,6 +199,8 @@ public class Main implements Handler
 
 		else if(command.equals("GetTasksStatus"))
 		{
+			checkIP(config, ip);
+
 			result.append("Get task status");
 		}
 
@@ -201,6 +210,8 @@ public class Main implements Handler
 
 		else if(command.equals("StopServer"))
 		{
+			checkIP(config, ip);
+
 			result.append("Stop the server");
 		}
 
@@ -212,6 +223,32 @@ public class Main implements Handler
 		}
 
 		return result;
+	}
+
+	/*---------------------------------------------------------------------*/
+
+	private void checkIP(Map<String, String> config, String ip) throws Exception
+	{
+		/*-----------------------------------------------------------------*/
+
+		String ips = config.get("ips");
+
+		if(ips != null)
+		{
+			for(String IP: s_ipSplitPattern.split(ips))
+			{
+				if(ip.equals(IP))
+				{
+					return;
+				}
+			}
+		}
+
+		/*-----------------------------------------------------------------*/
+
+		throw new Exception("User not allowed");
+
+		/*-----------------------------------------------------------------*/
 	}
 
 	/*---------------------------------------------------------------------*/
