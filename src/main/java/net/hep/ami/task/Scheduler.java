@@ -19,7 +19,6 @@ public class Scheduler extends Thread
 
 	private String m_routerUser;
 	private String m_routerPass;
-
 	private String m_serverName;
 
 	/*---------------------------------------------------------------------*/
