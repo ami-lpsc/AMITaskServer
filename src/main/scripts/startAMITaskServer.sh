@@ -1,5 +1,6 @@
 #!/bin/bash
 
+PORT=1357
 JAVA_HOME=/usr
 
 #############################################################################
@@ -35,7 +36,7 @@ then
 
   ###########################################################################
 
-  $JAVA_HOME/bin/java -Dami.conffile=$AMI_HOME/AMI.xml -classpath $AMICLASSPATH net.hep.ami.task.Main &> $AMI_HOME/log/AMITaskServer.out &
+  $JAVA_HOME/bin/java -Dami.conffile=$AMI_HOME/AMI.xml -classpath $AMICLASSPATH net.hep.ami.task.Main $PORT &> $AMI_HOME/log/AMITaskServer.out &
 
   ###########################################################################
 fi
