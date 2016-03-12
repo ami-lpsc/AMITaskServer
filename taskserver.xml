@@ -44,16 +44,6 @@
 
     <fileSet>
       <directory>${project.build.scriptSourceDirectory}</directory>
-      <outputDirectory>classes</outputDirectory>
-      <excludes>
-        <exclude>*/**</exclude>
-      </excludes>
-    </fileSet>
-
-    <!--******************************************************************-->
-
-    <fileSet>
-      <directory>${project.build.scriptSourceDirectory}</directory>
       <outputDirectory>log</outputDirectory>
       <excludes>
         <exclude>*/**</exclude>
