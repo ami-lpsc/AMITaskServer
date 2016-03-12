@@ -9,9 +9,9 @@ public class Main implements Handler
 {
 	/*---------------------------------------------------------------------*/
 
-	private static final int s_max_tasks_default = 10;
+	private static final int s_maxTasksDefault = 10;
 
-	private static final float s_compression_default = 2.0f;
+	private static final float s_compressionDefault = 2.0f;
 
 	private static final Pattern s_ipSplitPattern = Pattern.compile("[^0-9\\.]");
 
@@ -30,18 +30,18 @@ public class Main implements Handler
 		/* GET CONNECTION INFORMATION                                      */
 		/*-----------------------------------------------------------------*/
 
-		String jdbc_url    = config.get("jdbc_url"   );
-		String router_user = config.get("router_user");
-		String router_pass = config.get("router_pass");
-		String server_name = config.get("server_name");
+		String jdbcUrl    = config.get("jdbc_url"   );
+		String routerUser = config.get("router_user");
+		String routerPass = config.get("router_pass");
+		String serverName = config.get("server_name");
 
-		if(jdbc_url    == null
+		if(jdbcUrl    == null
 		   ||
-		   router_user == null
+		   routerUser == null
 		   ||
-		   router_pass == null
+		   routerPass == null
 		   ||
-		   server_name == null
+		   serverName == null
 		 ) {
 			throw new Exception("config error");
 		}
@@ -52,16 +52,16 @@ public class Main implements Handler
 
 		String clazz;
 
-		/**/ if(jdbc_url.startsWith("jdbc:mysql")) {
+		/**/ if(jdbcUrl.startsWith("jdbc:mysql")) {
 			clazz = "org.gjt.mm.mysql.Driver";
 		}
-		else if(jdbc_url.startsWith("jdbc:oracle")) {
+		else if(jdbcUrl.startsWith("jdbc:oracle")) {
 			clazz = "oracle.jdbc.driver.OracleDriver";
 		}
-		else if(jdbc_url.startsWith("jdbc:postgresql")) {
+		else if(jdbcUrl.startsWith("jdbc:postgresql")) {
 			clazz = "org.postgresql.Driver";
 		}
-		else if(jdbc_url.startsWith("jdbc:sqlite")) {
+		else if(jdbcUrl.startsWith("jdbc:sqlite")) {
 			clazz = "org.sqlite.JDBC";
 		}
 		else {
@@ -76,9 +76,9 @@ public class Main implements Handler
 
 		s = config.get("max_tasks");
 
-		int max_tasks = (s != null) ? Integer.parseInt(s) : s_max_tasks_default;
+		int maxTasks = (s != null) ? Integer.parseInt(s) : s_maxTasksDefault;
 
-		if(max_tasks < 1)
+		if(maxTasks < 1)
 		{
 			throw new Exception("`max_tasks` out of range");
 		}
@@ -87,7 +87,7 @@ public class Main implements Handler
 
 		s = config.get("compression");
 
-		Float compression = (s != null) ? Float.parseFloat(s) : s_compression_default;
+		Float compression = (s != null) ? Float.parseFloat(s) : s_compressionDefault;
 
 		if(compression < 1.0)
 		{
@@ -98,7 +98,7 @@ public class Main implements Handler
 		/* RUN SCHEDULER                                                   */
 		/*-----------------------------------------------------------------*/
 
-		(m_scheduler = new Scheduler(jdbc_url, router_user, router_pass, server_name, max_tasks, compression)).start();
+		(m_scheduler = new Scheduler(jdbcUrl, routerUser, routerPass, serverName, maxTasks, compression)).start();
 
 		/*-----------------------------------------------------------------*/
 	}
