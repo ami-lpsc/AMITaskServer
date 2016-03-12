@@ -9,11 +9,9 @@ public class Scheduler extends Thread
 {
 	/*---------------------------------------------------------------------*/
 
+	private static final Integer s_timeoutDelay = 1000;
+
 	private static final Pattern s_lockNameSplitPattern = Pattern.compile("[^a-zA-Z0-9_]");
-
-	private static final int s_timeoutDelay = 1000;
-
-	private static final int s_timeoutSteps = 10;
 
 	/*---------------------------------------------------------------------*/
 
@@ -32,7 +30,7 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	private Connection m_connection = null;
+	private int m_numberOfPriorities = 0x00;
 
 	private List<Integer> m_priorityTable = null;
 
@@ -134,6 +132,8 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
+	private Connection m_connection = null;
+
 	private Connection getRouterConnection() throws Exception
 	{
 		if(m_connection == null || m_connection.isClosed())
@@ -163,9 +163,11 @@ public class Scheduler extends Thread
 
 			try
 			{
-				m_priorityTable = resultSet.next() ? PriorityTableBuilder.build(resultSet.getInt(1), m_compression)
-				                                   : PriorityTableBuilder.build(0x00000000000000000, m_compression)
+				m_numberOfPriorities = resultSet.next() ? resultSet.getInt(1)
+				                                        : 0x00000000000000000
 				;
+
+				m_priorityTable = PriorityTableBuilder.build(m_numberOfPriorities, m_compression);
 			}
 			finally
 			{
@@ -276,7 +278,7 @@ public class Scheduler extends Thread
 	{
 		/*-----------------------------------------------------------------*/
 
-		if(m_runningTaskMap.size() >= m_maxTasks || m_priorityTable.isEmpty())
+		if(m_numberOfPriorities == 0 || m_runningTaskMap.size() >= m_maxTasks)
 		{
 			return;
 		}
@@ -308,14 +310,14 @@ public class Scheduler extends Thread
 			{
 				/*---------------------------------------------------------*/
 
-				if(i++ >= s_timeoutSteps)
+				if(i++ >= m_numberOfPriorities)
 				{
 					return;
 				}
 
 				/*---------------------------------------------------------*/
 
-				try { Thread.sleep(s_timeoutDelay / s_timeoutSteps); } catch(InterruptedException e) { /* IGNORE */ }
+				try { Thread.sleep(s_timeoutDelay / m_numberOfPriorities); } catch(InterruptedException e) { /* IGNORE */ }
 
 				/*---------------------------------------------------------*/
 
@@ -420,20 +422,26 @@ public class Scheduler extends Thread
 			{
 				while(resultSet.next())
 				{
+					map = new HashMap<String, String>();
+
+					/*-----------------------------------------------------*/
+
 					id = resultSet.getString(1);
 					name = resultSet.getString(2);
 					description = resultSet.getString(3);
-
-					status = resultSet.getInt(4);
-
-					map = new HashMap<String, String>();
 
 					map.put("id"         , id          != null ? id          : "");
 					map.put("name"       , name        != null ? name        : "");
 					map.put("description", description != null ? description : "");
 
+					/*-----------------------------------------------------*/
+
+					status = resultSet.getInt(4);
+
 					map.put("running", Integer.toString((status >> 0) & 0x01));
 					map.put("success", Integer.toString((status >> 1) & 0x01));
+
+					/*-----------------------------------------------------*/
 
 					result.add(map);
 				}
