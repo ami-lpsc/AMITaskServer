@@ -34,6 +34,10 @@ Example of configuration file (~/.ami/AMI.xml, /etc/ami/AMI.xml or java -Dami.co
 	  <property name="router_pass"><![CDATA[router_pass]]></property>
 
 	  <property name="server_name"><![CDATA[server_name]]></property>
+
+	  <!--
+	  <property name="ips"><![CDATA[ip1, ip2, ...]]></property>
+	  -->
 	</properties>
 
 Using AMITaskServer
@@ -44,7 +48,7 @@ Using AMITaskServer
 	./AMITaskServer start
 	./AMITaskServer stop
 
-Install Linux Service
+Install Linux service
 =====================
 
 	./installAMITaskServer.sh
