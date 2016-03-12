@@ -226,7 +226,7 @@ public class Scheduler extends Thread
 		/*-----------------------------------------------------------------*/
 
 		int nb;
-		boolean status;
+		boolean isSuccess;
 
 		Connection connection = getRouterConnection();
 		Statement statement = connection.createStatement();
@@ -235,10 +235,10 @@ public class Scheduler extends Thread
 		{
 			for(String taskId: toBeRemoved)
 			{
-				status = m_runningTaskMap.remove(taskId).getStatus();
+				isSuccess = m_runningTaskMap.remove(taskId).isSuccess();
 
-				nb = status ? statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 2) WHERE id = '" + taskId + "'")
-				            : statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 0) WHERE id = '" + taskId + "'")
+				nb = isSuccess ? statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 2) WHERE id = '" + taskId + "'")
+				               : statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 0) WHERE id = '" + taskId + "'")
 				;
 
 				if(nb > 0)
@@ -309,14 +309,16 @@ public class Scheduler extends Thread
 			{
 				/*---------------------------------------------------------*/
 
-				if(i++ >= m_numberOfPriorities)
+				/**/ if(i >= 0x000000000000000001)
+				{
+					try { Thread.sleep(s_timeoutDelay / m_numberOfPriorities); } catch(InterruptedException e) { /* IGNORE */ }
+				}
+				else if(i >= m_numberOfPriorities)
 				{
 					return;
 				}
 
-				/*---------------------------------------------------------*/
-
-				try { Thread.sleep(s_timeoutDelay / m_numberOfPriorities); } catch(InterruptedException e) { /* IGNORE */ }
+				i++;
 
 				/*---------------------------------------------------------*/
 

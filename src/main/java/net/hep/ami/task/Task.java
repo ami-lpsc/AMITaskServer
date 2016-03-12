@@ -35,7 +35,7 @@ public class Task
 
 	/*---------------------------------------------------------------------*/
 
-	public boolean getStatus()
+	public boolean isSuccess()
 	{
 		return m_process.exitValue() == 0;
 	}
