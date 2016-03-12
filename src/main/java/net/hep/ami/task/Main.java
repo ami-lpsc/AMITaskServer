@@ -233,14 +233,20 @@ public class Main implements Handler
 
 		String ips = config.get("ips");
 
-		if(ips != null)
+		if(ips == null)
 		{
-			for(String IP: s_ipSplitPattern.split(ips))
+			return;
+		}
+
+		/*-----------------------------------------------------------------*/
+
+		String[] IPS = s_ipSplitPattern.split(ips);
+
+		for(String IP: IPS)
+		{
+			if(ip.equals(IP))
 			{
-				if(ip.equals(IP))
-				{
-					return;
-				}
+				return;
 			}
 		}
 
