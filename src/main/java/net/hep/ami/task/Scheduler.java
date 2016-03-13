@@ -89,18 +89,16 @@ public class Scheduler extends Thread
 
 		long i = 0;
 
-		Random random = new Random();
-
 		for(;;)
 		{
 			/*-------------------------------------------------------------*/
 
-			try { Thread.sleep(s_timeoutDelay); } catch(InterruptedException e) { /* IGNORE */ }
-
-			/*-------------------------------------------------------------*/
-
 			try
 			{
+				/*---------------------------------------------------------*/
+
+				sleep(s_timeoutDelay);
+
 				/*---------------------------------------------------------*/
 
 				if(i++ % 30 == 0)
@@ -112,7 +110,7 @@ public class Scheduler extends Thread
 
 				removeFinishTasks();
 
-				startTask(random);
+				startTask();
 
 				/*---------------------------------------------------------*/
 			}
@@ -142,8 +140,6 @@ public class Scheduler extends Thread
 				m_routerUser,
 				m_routerPass
 			);
-
-			m_connection.setAutoCommit(false);
 		}
 
 		return m_connection;
@@ -194,10 +190,7 @@ public class Scheduler extends Thread
 
 		try
 		{
-			if(statement.executeUpdate("UPDATE router_task SET status = (status & ~1) WHERE serverName = '" + m_serverName.replace("'", "''") + "'") > 0)
-			{
-				connection.commit();
-			}
+			statement.executeUpdate("UPDATE router_task SET status = (status & ~1) WHERE serverName = '" + m_serverName.replace("'", "''") + "'");
 		}
 		finally
 		{
@@ -225,9 +218,6 @@ public class Scheduler extends Thread
 
 		/*-----------------------------------------------------------------*/
 
-		int nb;
-		boolean isSuccess;
-
 		Connection connection = getRouterConnection();
 		Statement statement = connection.createStatement();
 
@@ -235,15 +225,13 @@ public class Scheduler extends Thread
 		{
 			for(String taskId: toBeRemoved)
 			{
-				isSuccess = m_runningTaskMap.remove(taskId).isSuccess();
-
-				nb = isSuccess ? statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 2) WHERE id = '" + taskId + "'")
-				               : statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 0) WHERE id = '" + taskId + "'")
-				;
-
-				if(nb > 0)
+				if(m_runningTaskMap.remove(taskId).isSuccess())
 				{
-					connection.commit();
+					statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 2) WHERE id = '" + taskId + "'");
+				}
+				else
+				{
+					statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 0) WHERE id = '" + taskId + "'");
 				}
 			}
 		}
@@ -273,7 +261,9 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	private void startTask(Random random) throws Exception
+	private Random m_random = new Random();
+
+	private void startTask() throws Exception
 	{
 		/*-----------------------------------------------------------------*/
 
@@ -309,11 +299,7 @@ public class Scheduler extends Thread
 			{
 				/*---------------------------------------------------------*/
 
-				/**/ if(i >= 0x000000000000000001)
-				{
-					try { Thread.sleep(s_timeoutDelay / m_numberOfPriorities); } catch(InterruptedException e) { /* IGNORE */ }
-				}
-				else if(i >= m_numberOfPriorities)
+				if(i >= m_numberOfPriorities)
 				{
 					return;
 				}
@@ -322,7 +308,11 @@ public class Scheduler extends Thread
 
 				/*---------------------------------------------------------*/
 
-				resultSet = statement.executeQuery("SELECT id, command, lockNames FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND priority = '" + m_priorityTable.get(random.nextInt(m_priorityTable.size())) + "' AND (lastRunTime + step) < '" + date.getTime() + "' AND (status & 1) = 0");
+				sleep(s_timeoutDelay / (2 * m_numberOfPriorities));
+
+				/*---------------------------------------------------------*/
+
+				resultSet = statement.executeQuery("SELECT id, command, lockNames FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND priority = '" + m_priorityTable.get(m_random.nextInt(m_priorityTable.size())) + "' AND (lastRunTime + step) < '" + date.getTime() + "' AND (status & 1) = 0");
 
 				try
 				{
@@ -359,7 +349,7 @@ public class Scheduler extends Thread
 
 			/*-------------------------------------------------------------*/
 
-			Tuple tuple = list.get(random.nextInt(list.size()));
+			Tuple tuple = list.get(m_random.nextInt(list.size()));
 
 			/*-------------------------------------------------------------*/
 			/* RUN TASK                                                    */
@@ -367,10 +357,7 @@ public class Scheduler extends Thread
 
 			m_runningTaskMap.put(tuple.id, new Task(tuple.command, tuple.lockNames));
 
-			if(statement.executeUpdate("UPDATE router_task SET status = (status | 1), lastRunTime = '" + date.getTime() + "', lastRunDate = '" + net.hep.ami.mini.JettyHandler.s_simpleDateFormat.format(date) + "' WHERE id = '" + tuple.id + "'") > 0)
-			{
-				connection.commit();
-			}
+			statement.executeUpdate("UPDATE router_task SET status = (status | 1), lastRunTime = '" + date.getTime() + "', lastRunDate = '" + net.hep.ami.mini.JettyHandler.s_simpleDateFormat.format(date) + "' WHERE id = '" + tuple.id + "'");
 
 			/*-------------------------------------------------------------*/
 		}
