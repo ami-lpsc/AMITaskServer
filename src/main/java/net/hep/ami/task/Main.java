@@ -147,6 +147,7 @@ public class Main implements Handler
 				result.append("<row>")
 				      .append("<field name=\"id\"><![CDATA[" + map.get("id") + "]]></field>")
 				      .append("<field name=\"name\"><![CDATA[" + map.get("name") + "]]></field>")
+				      .append("<field name=\"command\"><![CDATA[" + map.get("command") + "]]></field>")
 				      .append("<field name=\"description\"><![CDATA[" + map.get("description") + "]]></field>")
 				      .append("<field name=\"running\"><![CDATA[" + map.get("running") + "]]></field>")
 				      .append("<field name=\"exitBit\"><![CDATA[" + map.get("exitBit") + "]]></field>")

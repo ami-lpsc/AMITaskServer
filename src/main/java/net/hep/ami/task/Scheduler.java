@@ -218,11 +218,11 @@ public class Scheduler extends Thread
 	{
 		/*-----------------------------------------------------------------*/
 
-		for(Entry<String, Task> entry: m_runningTaskMap.entrySet())
+		for(Task task: m_runningTaskMap.values())
 		{
-			warn("Killing task `" + entry.getKey() + "`");
+			warn("Killing task `" + task.getName() + "`");
 
-			entry.getValue().kill();
+			task.kill();
 		}
 
 		/*-----------------------------------------------------------------*/
@@ -267,6 +267,8 @@ public class Scheduler extends Thread
 
 		/*-----------------------------------------------------------------*/
 
+		Task task;
+
 		Connection connection = getRouterConnection();
 		Statement statement = connection.createStatement();
 
@@ -274,7 +276,9 @@ public class Scheduler extends Thread
 		{
 			for(String taskId: toBeRemoved)
 			{
-				if(m_runningTaskMap.remove(taskId).isSuccess())
+				task = m_runningTaskMap.remove(taskId);
+
+				if(task.isSuccess())
 				{
 					statement.executeUpdate("UPDATE router_task SET status = ((status & ~0b11) | 0b00) WHERE id = '" + taskId + "'");
 				}
@@ -283,7 +287,7 @@ public class Scheduler extends Thread
 					statement.executeUpdate("UPDATE router_task SET status = ((status & ~0b11) | 0b10) WHERE id = '" + taskId + "'");
 				}
 
-				info("Task `" + taskId + "` finished");
+				info("Task `" + task.getName() + "` finished");
 			}
 		}
 		finally
@@ -299,12 +303,14 @@ public class Scheduler extends Thread
 	private static class Tuple
 	{
 		public String id;
+		public String name;
 		public String command;
 		public Set<String> lockNames;
 
-		public Tuple(String _id, String _command, Set<String> _lockNames)
+		public Tuple(String _id, String _name, String _command, Set<String> _lockNames)
 		{
 			id = _id;
+			name = _name;
 			command = _command;
 			lockNames = _lockNames;
 		}
@@ -338,7 +344,8 @@ public class Scheduler extends Thread
 
 			int i = 0;
 
-			String a, b, c;
+			String a, b;
+			String c, d;
 
 			ResultSet resultSet;
 
@@ -363,7 +370,7 @@ public class Scheduler extends Thread
 
 				/*---------------------------------------------------------*/
 
-				resultSet = statement.executeQuery("SELECT id, command, lockNames FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND priority = '" + m_priorityTable.get(m_random.nextInt(m_priorityTable.size())) + "' AND (lastRunTime + step) < '" + date.getTime() + "' AND (status & 0b01) = 0b00");
+				resultSet = statement.executeQuery("SELECT id, name, command, lockNames FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND priority = '" + m_priorityTable.get(m_random.nextInt(m_priorityTable.size())) + "' AND (lastRunTime + step) < '" + date.getTime() + "' AND (status & 0b01) = 0b00");
 
 				try
 				{
@@ -374,10 +381,11 @@ public class Scheduler extends Thread
 						a = resultSet.getString(1);
 						b = resultSet.getString(2);
 						c = resultSet.getString(3);
+						d = resultSet.getString(4);
 
-						if(c != null)
+						if(d != null)
 						{
-							for(String lockName: s_lockNameSplitPattern.split(c))
+							for(String lockName: s_lockNameSplitPattern.split(d))
 							{
 								lockNames.add(lockName);
 							}
@@ -385,7 +393,7 @@ public class Scheduler extends Thread
 
 						if(isLocked(lockNames) == false)
 						{
-							list.add(new Tuple(a, b, lockNames));
+							list.add(new Tuple(a, b, c, lockNames));
 						}
 					}
 				}
@@ -406,9 +414,9 @@ public class Scheduler extends Thread
 			/* RUN TASK                                                    */
 			/*-------------------------------------------------------------*/
 
-			info("Starting task `" + tuple.id + "`");
+			info("Starting task `" + tuple.name + "`");
 
-			m_runningTaskMap.put(tuple.id, new Task(tuple.command, tuple.lockNames));
+			m_runningTaskMap.put(tuple.id, new Task(tuple.name, tuple.command, tuple.lockNames));
 
 			statement.executeUpdate("UPDATE router_task SET status = ((status & ~0b11) | 0b01), lastRunTime = '" + date.getTime() + "', lastRunDate = '" + net.hep.ami.mini.JettyHandler.s_simpleDateFormat.format(date) + "' WHERE id = '" + tuple.id + "'");
 
@@ -449,12 +457,13 @@ public class Scheduler extends Thread
 
 		try
 		{
-			ResultSet resultSet = statement.executeQuery("SELECT id, name, description, status FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "'");
+			ResultSet resultSet = statement.executeQuery("SELECT id, name, command, description, status FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "'");
 
 			Map<String, String> map;
 
 			String id;
 			String name;
+			String command;
 			String description;
 
 			int status;
@@ -469,15 +478,17 @@ public class Scheduler extends Thread
 
 					id = resultSet.getString(1);
 					name = resultSet.getString(2);
-					description = resultSet.getString(3);
+					command = resultSet.getString(3);
+					description = resultSet.getString(4);
 
 					map.put("id"         , id          != null ? id          : "");
 					map.put("name"       , name        != null ? name        : "");
+					map.put("command"    , command     != null ? command     : "");
 					map.put("description", description != null ? description : "");
 
 					/*-----------------------------------------------------*/
 
-					status = resultSet.getInt(4);
+					status = resultSet.getInt(5);
 
 					map.put("running", Integer.toString((status >> 0) & 0b01));
 					map.put("exitBit", Integer.toString((status >> 1) & 0b01));
