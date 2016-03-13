@@ -33,6 +33,7 @@ public class Main implements Handler
 		String jdbcUrl    = config.get("jdbc_url"   );
 		String routerUser = config.get("router_user");
 		String routerPass = config.get("router_pass");
+
 		String serverName = config.get("server_name");
 
 		if(jdbcUrl    == null
