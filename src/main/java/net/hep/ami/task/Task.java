@@ -11,23 +11,34 @@ public class Task
 
 	/*---------------------------------------------------------------------*/
 
+	private String m_id;
 	private String m_name;
 	private String m_command;
+
 	private Process m_process;
 
 	private Set<String> m_lockNames;
 
 	/*---------------------------------------------------------------------*/
 
-	public Task(String name, String command, Set<String> lockNames) throws IOException
+	public Task(String id, String name, String command, Set<String> lockNames) throws IOException
 	{
+		m_id = id;
 		m_name = name;
 		m_command = command;
-		m_lockNames = lockNames;
 
 		m_process = Runtime.getRuntime().exec(s_isWindows ? new String[] {("cmd.exe"), "/C", command}
 		                                                  : new String[] {"/bin/bash", "-c", command}
 		);
+
+		m_lockNames = lockNames;
+	}
+
+	/*---------------------------------------------------------------------*/
+
+	public String getId()
+	{
+		return m_id;
 	}
 
 	/*---------------------------------------------------------------------*/

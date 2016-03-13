@@ -416,7 +416,7 @@ public class Scheduler extends Thread
 
 			info("Starting task `" + tuple.name + "`");
 
-			m_runningTaskMap.put(tuple.id, new Task(tuple.name, tuple.command, tuple.lockNames));
+			m_runningTaskMap.put(tuple.id, new Task(tuple.id, tuple.name, tuple.command, tuple.lockNames));
 
 			statement.executeUpdate("UPDATE router_task SET status = ((status & ~0b11) | 0b01), lastRunTime = '" + date.getTime() + "', lastRunDate = '" + net.hep.ami.mini.JettyHandler.s_simpleDateFormat.format(date) + "' WHERE id = '" + tuple.id + "'");
 
