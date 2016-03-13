@@ -40,7 +40,11 @@ public class Scheduler extends Thread
 
 	public Scheduler(String jdbcUrl, String routerUser, String routerPass, String serverName, int maxTasks, float compression) throws Exception
 	{
-		super();
+		/*-----------------------------------------------------------------*/
+		/* SUPER CONSTRUCTOR                                               */
+		/*-----------------------------------------------------------------*/
+
+		super(Scheduler.class.getName());
 
 		/*-----------------------------------------------------------------*/
 		/* SET INSTANCE VARIABLES                                          */
@@ -74,14 +78,14 @@ public class Scheduler extends Thread
 	{
 		/*-----------------------------------------------------------------*/
 
-		Runtime.getRuntime().addShutdownHook(new Thread() {
+		Runtime.getRuntime().addShutdownHook(new Thread(Scheduler.class.getName()) {
 
 			@Override
 			public void run()
 			{
 				try
 				{
-					removeAllTasks();
+					removeAllTasks(false);
 				}
 				catch(Exception e)
 				{
@@ -91,6 +95,19 @@ public class Scheduler extends Thread
 				}
 			}
 		});
+
+		/*-----------------------------------------------------------------*/
+
+		try
+		{
+			removeAllTasks(true);
+		}
+		catch(Exception e)
+		{
+			System.err.println(
+				e.getMessage()
+			);
+		}
 
 		/*-----------------------------------------------------------------*/
 
@@ -154,6 +171,20 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
+	private void info(String msg)
+	{
+		org.eclipse.jetty.util.log.Log.getRootLogger().info(msg);
+	}
+
+	/*---------------------------------------------------------------------*/
+
+	private void warn(String msg)
+	{
+		org.eclipse.jetty.util.log.Log.getRootLogger().warn(msg);
+	}
+
+	/*---------------------------------------------------------------------*/
+
 	private void buildPriorityTable() throws Exception
 	{
 		Connection connection = getRouterConnection();
@@ -184,13 +215,15 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	private void removeAllTasks() throws Exception
+	private void removeAllTasks(boolean success) throws Exception
 	{
 		/*-----------------------------------------------------------------*/
 
-		for(Task task: m_runningTaskMap.values())
+		for( Entry<String, Task> entry: m_runningTaskMap.entrySet())
 		{
-			task.kill();
+			warn("Killing task `" + entry.getKey() + "`");
+
+			entry.getValue().kill();
 		}
 
 		/*-----------------------------------------------------------------*/
@@ -200,7 +233,14 @@ public class Scheduler extends Thread
 
 		try
 		{
-			statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 2) WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND (status & 1) = 1");
+			if(success)
+			{
+				statement.executeUpdate("UPDATE router_task SET status = ((status & ~1) | 0) WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND (status & 1) = 1");
+			}
+			else
+			{
+				statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 2) WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND (status & 1) = 1");
+			}
 		}
 		finally
 		{
@@ -243,6 +283,8 @@ public class Scheduler extends Thread
 				{
 					statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 2) WHERE id = '" + taskId + "'");
 				}
+
+				info("Task `" + taskId + "` finished");
 			}
 		}
 		finally
@@ -364,6 +406,8 @@ public class Scheduler extends Thread
 			/*-------------------------------------------------------------*/
 			/* RUN TASK                                                    */
 			/*-------------------------------------------------------------*/
+
+			info("Starting task `" + tuple.id + "`");
 
 			m_runningTaskMap.put(tuple.id, new Task(tuple.command, tuple.lockNames));
 
