@@ -6,6 +6,11 @@ import java.util.Map.*;
 import java.util.regex.*;
 import java.util.concurrent.*;
 
+/* status flag:
+ *  - bit 0: 0 = pending, 1 = running
+ *  - bit 1: 0 = success, 1 = error
+ */
+
 public class Scheduler extends Thread
 {
 	/*---------------------------------------------------------------------*/
@@ -85,13 +90,11 @@ public class Scheduler extends Thread
 			{
 				try
 				{
-					removeAllTasks(false);
+					removeAllTasks();
 				}
 				catch(Exception e)
 				{
-					System.err.println(
-						e.getMessage()
-					);
+					warn(e.getMessage());
 				}
 			}
 		});
@@ -100,13 +103,11 @@ public class Scheduler extends Thread
 
 		try
 		{
-			removeAllTasks(true);
+			removeAllTasks();
 		}
 		catch(Exception e)
 		{
-			System.err.println(
-				e.getMessage()
-			);
+			warn(e.getMessage());
 		}
 
 		/*-----------------------------------------------------------------*/
@@ -140,9 +141,7 @@ public class Scheduler extends Thread
 			}
 			catch(Exception e)
 			{
-				System.err.println(
-					e.getMessage()
-				);
+				warn(e.getMessage());
 			}
 
 			/*-------------------------------------------------------------*/
@@ -215,11 +214,11 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	private void removeAllTasks(boolean success) throws Exception
+	private void removeAllTasks() throws Exception
 	{
 		/*-----------------------------------------------------------------*/
 
-		for( Entry<String, Task> entry: m_runningTaskMap.entrySet())
+		for(Entry<String, Task> entry: m_runningTaskMap.entrySet())
 		{
 			warn("Killing task `" + entry.getKey() + "`");
 
@@ -233,13 +232,13 @@ public class Scheduler extends Thread
 
 		try
 		{
-			if(success)
+			if(m_runningTaskMap.isEmpty())
 			{
-				statement.executeUpdate("UPDATE router_task SET status = ((status & ~1) | 0) WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND (status & 1) = 1");
+				statement.executeUpdate("UPDATE router_task SET status = ((status & ~0x01) | 0x00) WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND (status & 0b01) = 0b01");
 			}
 			else
 			{
-				statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 2) WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND (status & 1) = 1");
+				statement.executeUpdate("UPDATE router_task SET status = ((status & ~0b11) | 0b10) WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND (status & 0b01) = 0b01");
 			}
 		}
 		finally
@@ -277,11 +276,11 @@ public class Scheduler extends Thread
 			{
 				if(m_runningTaskMap.remove(taskId).isSuccess())
 				{
-					statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 0) WHERE id = '" + taskId + "'");
+					statement.executeUpdate("UPDATE router_task SET status = ((status & ~0b11) | 0b00) WHERE id = '" + taskId + "'");
 				}
 				else
 				{
-					statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 2) WHERE id = '" + taskId + "'");
+					statement.executeUpdate("UPDATE router_task SET status = ((status & ~0b11) | 0b10) WHERE id = '" + taskId + "'");
 				}
 
 				info("Task `" + taskId + "` finished");
@@ -364,7 +363,7 @@ public class Scheduler extends Thread
 
 				/*---------------------------------------------------------*/
 
-				resultSet = statement.executeQuery("SELECT id, command, lockNames FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND priority = '" + m_priorityTable.get(m_random.nextInt(m_priorityTable.size())) + "' AND (lastRunTime + step) < '" + date.getTime() + "' AND (status & 1) = 0");
+				resultSet = statement.executeQuery("SELECT id, command, lockNames FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND priority = '" + m_priorityTable.get(m_random.nextInt(m_priorityTable.size())) + "' AND (lastRunTime + step) < '" + date.getTime() + "' AND (status & 0b01) = 0b00");
 
 				try
 				{
@@ -411,7 +410,7 @@ public class Scheduler extends Thread
 
 			m_runningTaskMap.put(tuple.id, new Task(tuple.command, tuple.lockNames));
 
-			statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 1), lastRunTime = '" + date.getTime() + "', lastRunDate = '" + net.hep.ami.mini.JettyHandler.s_simpleDateFormat.format(date) + "' WHERE id = '" + tuple.id + "'");
+			statement.executeUpdate("UPDATE router_task SET status = ((status & ~0b11) | 0b01), lastRunTime = '" + date.getTime() + "', lastRunDate = '" + net.hep.ami.mini.JettyHandler.s_simpleDateFormat.format(date) + "' WHERE id = '" + tuple.id + "'");
 
 			/*-------------------------------------------------------------*/
 		}
@@ -480,8 +479,8 @@ public class Scheduler extends Thread
 
 					status = resultSet.getInt(4);
 
-					map.put("running", Integer.toString((status >> 0) & 0x01));
-					map.put("exitBit", Integer.toString((status >> 1) & 0x01));
+					map.put("running", Integer.toString((status >> 0) & 0b01));
+					map.put("exitBit", Integer.toString((status >> 1) & 0b01));
 
 					/*-----------------------------------------------------*/
 
