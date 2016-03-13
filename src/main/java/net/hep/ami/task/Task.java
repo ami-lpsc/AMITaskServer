@@ -28,6 +28,13 @@ public class Task
 
 	/*---------------------------------------------------------------------*/
 
+	public void kill()
+	{
+		m_process.destroy();
+	}
+
+	/*---------------------------------------------------------------------*/
+
 	public boolean isAlive()
 	{
 		return m_process.isAlive();

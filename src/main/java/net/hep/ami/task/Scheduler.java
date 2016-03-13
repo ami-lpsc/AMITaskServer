@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.Map.*;
 import java.util.regex.*;
+import java.util.concurrent.*;
 
 public class Scheduler extends Thread
 {
@@ -33,7 +34,7 @@ public class Scheduler extends Thread
 
 	private List<Integer> m_priorityTable = null;
 
-	private final Map<String, Task> m_runningTaskMap = new HashMap<String, Task>();
+	private final Map<String, Task> m_runningTaskMap = new ConcurrentHashMap<String, Task>();
 
 	/*---------------------------------------------------------------------*/
 
@@ -74,16 +75,23 @@ public class Scheduler extends Thread
 	{
 		/*-----------------------------------------------------------------*/
 
-		try
-		{
-			removeAllTasks();
-		}
-		catch(Exception e)
-		{
-			System.err.println(
-				e.getMessage()
-			);
-		}
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+
+			@Override
+			public void run()
+			{
+				try
+				{
+					removeAllTasks();
+				}
+				catch(Exception e)
+				{
+					System.err.println(
+						e.getMessage()
+					);
+				}
+			}
+		});
 
 		/*-----------------------------------------------------------------*/
 
@@ -181,7 +189,10 @@ public class Scheduler extends Thread
 	{
 		/*-----------------------------------------------------------------*/
 
-		m_runningTaskMap.clear();
+		for(Task task: m_runningTaskMap.values())
+		{
+			task.kill();
+		}
 
 		/*-----------------------------------------------------------------*/
 
@@ -190,7 +201,7 @@ public class Scheduler extends Thread
 
 		try
 		{
-			statement.executeUpdate("UPDATE router_task SET status = (status & ~1) WHERE serverName = '" + m_serverName.replace("'", "''") + "'");
+			statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 2) WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND (status & 1) = 1");
 		}
 		finally
 		{
@@ -227,11 +238,11 @@ public class Scheduler extends Thread
 			{
 				if(m_runningTaskMap.remove(taskId).isSuccess())
 				{
-					statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 2) WHERE id = '" + taskId + "'");
+					statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 0) WHERE id = '" + taskId + "'");
 				}
 				else
 				{
-					statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 0) WHERE id = '" + taskId + "'");
+					statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 2) WHERE id = '" + taskId + "'");
 				}
 			}
 		}
@@ -357,7 +368,7 @@ public class Scheduler extends Thread
 
 			m_runningTaskMap.put(tuple.id, new Task(tuple.command, tuple.lockNames));
 
-			statement.executeUpdate("UPDATE router_task SET status = (status | 1), lastRunTime = '" + date.getTime() + "', lastRunDate = '" + net.hep.ami.mini.JettyHandler.s_simpleDateFormat.format(date) + "' WHERE id = '" + tuple.id + "'");
+			statement.executeUpdate("UPDATE router_task SET status = ((status & ~3) | 1), lastRunTime = '" + date.getTime() + "', lastRunDate = '" + net.hep.ami.mini.JettyHandler.s_simpleDateFormat.format(date) + "' WHERE id = '" + tuple.id + "'");
 
 			/*-------------------------------------------------------------*/
 		}
@@ -427,7 +438,7 @@ public class Scheduler extends Thread
 					status = resultSet.getInt(4);
 
 					map.put("running", Integer.toString((status >> 0) & 0x01));
-					map.put("success", Integer.toString((status >> 1) & 0x01));
+					map.put("exitBit", Integer.toString((status >> 1) & 0x01));
 
 					/*-----------------------------------------------------*/
 
