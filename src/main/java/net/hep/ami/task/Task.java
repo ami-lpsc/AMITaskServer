@@ -57,7 +57,7 @@ public class Task
 
 	/*---------------------------------------------------------------------*/
 
-	public void kill()
+	public void destroy()
 	{
 		m_process.destroy();
 	}

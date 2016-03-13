@@ -222,7 +222,7 @@ public class Scheduler extends Thread
 		{
 			warn("Killing task `" + task.getName() + "`");
 
-			task.kill();
+			task.destroy();
 		}
 
 		/*-----------------------------------------------------------------*/
