@@ -90,7 +90,7 @@ public class Scheduler extends Thread
 			{
 				try
 				{
-					removeAllTasks();
+					removeAllTasks(false);
 				}
 				catch(Exception e)
 				{
@@ -103,7 +103,7 @@ public class Scheduler extends Thread
 
 		try
 		{
-			removeAllTasks();
+			removeAllTasks(true);
 		}
 		catch(Exception e)
 		{
@@ -214,7 +214,7 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	private void removeAllTasks() throws Exception
+	private void removeAllTasks(boolean doNotChangeErrorBit) throws Exception
 	{
 		/*-----------------------------------------------------------------*/
 
@@ -232,7 +232,7 @@ public class Scheduler extends Thread
 
 		try
 		{
-			if(m_runningTaskMap.isEmpty())
+			if(doNotChangeErrorBit)
 			{
 				statement.executeUpdate("UPDATE router_task SET status = ((status & ~0b01) | 0b00) WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND (status & 0b01) = 0b01");
 			}
