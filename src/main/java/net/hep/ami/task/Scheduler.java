@@ -234,7 +234,7 @@ public class Scheduler extends Thread
 		{
 			if(m_runningTaskMap.isEmpty())
 			{
-				statement.executeUpdate("UPDATE router_task SET status = ((status & ~0x01) | 0x00) WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND (status & 0b01) = 0b01");
+				statement.executeUpdate("UPDATE router_task SET status = ((status & ~0b01) | 0b00) WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND (status & 0b01) = 0b01");
 			}
 			else
 			{
