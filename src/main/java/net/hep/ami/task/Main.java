@@ -27,7 +27,7 @@ public class Main implements Handler
 		String s;
 
 		/*-----------------------------------------------------------------*/
-		/* GET CONNECTION INFORMATION                                      */
+		/* CHECK TASK SERVER INFORMATION                                   */
 		/*-----------------------------------------------------------------*/
 
 		String jdbcUrl    = config.get("jdbc_url"   );
@@ -47,8 +47,6 @@ public class Main implements Handler
 			throw new Exception("config error");
 		}
 
-		/*-----------------------------------------------------------------*/
-		/* SERVER INFORMATION                                              */
 		/*-----------------------------------------------------------------*/
 
 		s = config.get("max_tasks");

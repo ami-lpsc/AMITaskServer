@@ -14,15 +14,13 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	private Querier m_querier;
-
-	/*---------------------------------------------------------------------*/
-
-	private String m_serverName;
+	private String m_server;
 
 	private int m_maxTasks;
 
 	private float m_compression;
+
+	private Querier m_querier;
 
 	/*---------------------------------------------------------------------*/
 
@@ -34,7 +32,7 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	public Scheduler(String jdbcUrl, String routerUser, String routerPass, String serverName, int maxTasks, float compression) throws Exception
+	public Scheduler(String jdbcUrl, String routerUser, String routerPass, String server, int maxTasks, float compression) throws Exception
 	{
 		/*-----------------------------------------------------------------*/
 		/* SUPER CONSTRUCTOR                                               */
@@ -43,22 +41,20 @@ public class Scheduler extends Thread
 		super(Scheduler.class.getName());
 
 		/*-----------------------------------------------------------------*/
-		/* CHECK JDBC CONNECTION                                           */
-		/*-----------------------------------------------------------------*/
-
-		m_querier = new Querier(jdbcUrl, routerUser, routerPass);
-
-		m_querier.getConnection();
-
-		/*-----------------------------------------------------------------*/
 		/* SET INSTANCE VARIABLES                                          */
 		/*-----------------------------------------------------------------*/
 
-		m_serverName = serverName;
+		m_server = server;
 
 		m_maxTasks = maxTasks;
 
 		m_compression = compression;
+
+		/*-----------------------------------------------------------------*/
+		/* CREATE AND CHECK QUERIER                                        */
+		/*-----------------------------------------------------------------*/
+
+		(m_querier = new Querier(jdbcUrl, routerUser, routerPass)).getConnection();
 
 		/*-----------------------------------------------------------------*/
 	}
@@ -68,6 +64,21 @@ public class Scheduler extends Thread
 	@Override
 	public void run()
 	{
+		/*-----------------------------------------------------------------*/
+		/* INITIALIZE SCHEDULER                                            */
+		/*-----------------------------------------------------------------*/
+
+		try
+		{
+			removeAllTasks();
+		}
+		catch(Exception e)
+		{
+			warn(e.getMessage());
+		}
+
+		/*-----------------------------------------------------------------*/
+		/* FINALIZE SCHEDULER                                              */
 		/*-----------------------------------------------------------------*/
 
 		Runtime.getRuntime().addShutdownHook(new Thread(Scheduler.class.getName()) {
@@ -87,16 +98,7 @@ public class Scheduler extends Thread
 		});
 
 		/*-----------------------------------------------------------------*/
-
-		try
-		{
-			removeAllTasks();
-		}
-		catch(Exception e)
-		{
-			warn(e.getMessage());
-		}
-
+		/* SCHEDULER LOOP                                                  */
 		/*-----------------------------------------------------------------*/
 
 		long i = 0;
@@ -154,7 +156,7 @@ public class Scheduler extends Thread
 
 		try
 		{
-			ResultSet resultSet = statement.executeQuery("SELECT MAX(priority) + 1 FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "'");
+			ResultSet resultSet = statement.executeQuery("SELECT MAX(priority) + 1 FROM router_task WHERE server = '" + m_server.replace("'", "''") + "'");
 
 			try
 			{
@@ -195,7 +197,7 @@ public class Scheduler extends Thread
 
 		try
 		{
-			statement.executeUpdate("UPDATE router_task SET running = 0 WHERE serverName = '" + m_serverName.replace("'", "''") + "'");
+			statement.executeUpdate("UPDATE router_task SET running = 0 WHERE server = '" + m_server.replace("'", "''") + "'");
 		}
 		finally
 		{
@@ -325,7 +327,7 @@ public class Scheduler extends Thread
 
 				/*---------------------------------------------------------*/
 
-				resultSet = statement.executeQuery("SELECT id, name, command, commaSeparatedLocks FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND priority = '" + m_priorityTable.get(m_random.nextInt(m_priorityTable.size())) + "' AND (lastRunTime + step) < '" + date.getTime() + "' AND running = 0");
+				resultSet = statement.executeQuery("SELECT id, name, command, commaSeparatedLocks FROM router_task WHERE server = '" + m_server.replace("'", "''") + "' AND priority = '" + m_priorityTable.get(m_random.nextInt(m_priorityTable.size())) + "' AND (lastRunTime + step) < '" + date.getTime() + "' AND running = 0");
 
 				try
 				{
@@ -408,7 +410,7 @@ public class Scheduler extends Thread
 
 		try
 		{
-			ResultSet resultSet = statement.executeQuery("SELECT id, name, command, description, running, success FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "'");
+			ResultSet resultSet = statement.executeQuery("SELECT id, name, command, description, running, success FROM router_task WHERE server = '" + m_server.replace("'", "''") + "'");
 
 			Map<String, String> map;
 

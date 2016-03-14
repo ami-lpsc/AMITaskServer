@@ -11,10 +11,6 @@ public class Task
 
 	/*---------------------------------------------------------------------*/
 
-	private Process m_process;
-
-	/*---------------------------------------------------------------------*/
-
 	private String m_id;
 	private String m_name;
 	private String m_command;
@@ -22,16 +18,12 @@ public class Task
 
 	/*---------------------------------------------------------------------*/
 
+	private Process m_process;
+
+	/*---------------------------------------------------------------------*/
+
 	public Task(String id, String name, String command, Set<String> lockSet) throws IOException
 	{
-		/*-----------------------------------------------------------------*/
-		/* EXECUTE COMMAND                                                 */
-		/*-----------------------------------------------------------------*/
-
-		m_process = Runtime.getRuntime().exec(s_isWindows ? new String[] {("cmd.exe"), "/C", command}
-		                                                  : new String[] {"/bin/bash", "-c", command}
-		);
-
 		/*-----------------------------------------------------------------*/
 		/* SET INSTANCE VARIABLES                                          */
 		/*-----------------------------------------------------------------*/
@@ -42,27 +34,14 @@ public class Task
 		m_lockSet = lockSet;
 
 		/*-----------------------------------------------------------------*/
-	}
+		/* EXECUTE COMMAND                                                 */
+		/*-----------------------------------------------------------------*/
 
-	/*---------------------------------------------------------------------*/
+		m_process = Runtime.getRuntime().exec(s_isWindows ? new String[] {("cmd.exe"), "/C", command}
+		                                                  : new String[] {"/bin/bash", "-c", command}
+		);
 
-	public void destroy()
-	{
-		m_process.destroy();
-	}
-
-	/*---------------------------------------------------------------------*/
-
-	public boolean isAlive()
-	{
-		return m_process.isAlive();
-	}
-
-	/*---------------------------------------------------------------------*/
-
-	public boolean isSuccess()
-	{
-		return m_process.exitValue() == 0;
+		/*-----------------------------------------------------------------*/
 	}
 
 	/*---------------------------------------------------------------------*/
@@ -88,9 +67,9 @@ public class Task
 
 	/*---------------------------------------------------------------------*/
 
-	public boolean isLocked(Set<String> lockSet)
+	public boolean isLocked(Set<String> n_lockSet)
 	{
-		for(String a: lockSet)
+		for(String a: n_lockSet)
 		{
 			for(String b: m_lockSet)
 			{
@@ -102,6 +81,27 @@ public class Task
 		}
 
 		return false;
+	}
+
+	/*---------------------------------------------------------------------*/
+
+	public void destroy()
+	{
+		m_process.destroy();
+	}
+
+	/*---------------------------------------------------------------------*/
+
+	public boolean isAlive()
+	{
+		return m_process.isAlive();
+	}
+
+	/*---------------------------------------------------------------------*/
+
+	public boolean isSuccess()
+	{
+		return m_process.exitValue() == 0;
 	}
 
 	/*---------------------------------------------------------------------*/

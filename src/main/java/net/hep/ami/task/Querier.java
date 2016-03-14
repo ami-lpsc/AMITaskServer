@@ -16,8 +16,16 @@ public class Querier
 
 	/*---------------------------------------------------------------------*/
 
-	public Querier(String url, String user, String pass) throws ClassNotFoundException
+	public Querier(String url, String user, String pass) throws ClassNotFoundException, SQLException
 	{
+		/*-----------------------------------------------------------------*/
+		/* SET INSTANCE VARIABLES                                          */
+		/*-----------------------------------------------------------------*/
+
+		m_url = url;
+		m_user = user;
+		m_pass = pass;
+
 		/*-----------------------------------------------------------------*/
 		/* LOAD JDBC DRIVER                                                */
 		/*-----------------------------------------------------------------*/
@@ -40,15 +48,9 @@ public class Querier
 			throw new ClassNotFoundException("unknown JDBC driver");
 		}
 
+		/*-----------------------------------------------------------------*/
+
 		Class.forName(clazz);
-
-		/*-----------------------------------------------------------------*/
-		/* SET INSTANCE VARIABLES                                          */
-		/*-----------------------------------------------------------------*/
-
-		m_url = url;
-		m_user = user;
-		m_pass = pass;
 
 		/*-----------------------------------------------------------------*/
 	}

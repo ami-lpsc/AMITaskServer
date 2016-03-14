@@ -6,22 +6,23 @@ public class PriorityTableBuilder
 {
 	/*---------------------------------------------------------------------*/
 
-	public static List<Integer> build(int priorityNumber, float compressionFactor)
+	public static List<Integer> build(int numberOfPriorities, float compression)
 	{
-		List<Integer> result = new ArrayList<>();
+		List<Integer> result = //
+		              new ArrayList<>();
 
 		/*-----------------------------------------------------------------*/
 
 		float priorityMultiplicity = 1.0f;
 
-		for(int i = 0; i < priorityNumber; i++)
+		for(int i = 0; i < numberOfPriorities; i++)
 		{
 			for(int j = 0; j < priorityMultiplicity; j++)
 			{
-				result.add(priorityNumber - i - 1);
+				result.add(numberOfPriorities - i - 1);
 			}
 
-			priorityMultiplicity *= compressionFactor;
+			priorityMultiplicity *= compression;
 		}
 
 		/*-----------------------------------------------------------------*/
