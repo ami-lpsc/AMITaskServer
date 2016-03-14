@@ -88,9 +88,9 @@ public class Task
 
 	/*---------------------------------------------------------------------*/
 
-	public boolean isLocked(Set<String> lockNames)
+	public boolean isLocked(Set<String> lockSet)
 	{
-		for(String a: lockNames)
+		for(String a: lockSet)
 		{
 			for(String b: m_lockSet)
 			{

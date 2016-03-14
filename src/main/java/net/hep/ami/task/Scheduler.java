@@ -10,7 +10,7 @@ public class Scheduler extends Thread
 {
 	/*---------------------------------------------------------------------*/
 
-	private static final Pattern s_lockNameSplitPattern = Pattern.compile("[^a-zA-Z0-9_]");
+	private static final Pattern s_lockSplitPattern = Pattern.compile("[^a-zA-Z0-9_]");
 
 	/*---------------------------------------------------------------------*/
 
@@ -300,12 +300,11 @@ public class Scheduler extends Thread
 
 			int i = 0;
 
-			String a, b;
-			String c, d;
+			String temp;
 
-			ResultSet resultSet;
+			Set<String> lockSet;
 
-			Set<String> lockNames;
+			java.sql.ResultSet resultSet;
 
 			List<Tuple> list = new ArrayList<>();
 
@@ -332,24 +331,18 @@ public class Scheduler extends Thread
 				{
 					while(resultSet.next())
 					{
-						lockNames = new HashSet<>();
+						lockSet = new HashSet<>();
 
-						a = resultSet.getString(1);
-						b = resultSet.getString(2);
-						c = resultSet.getString(3);
-						d = resultSet.getString(4);
+						if((temp = resultSet.getString(4)) != null) Collections.addAll(lockSet, s_lockSplitPattern.split(temp));
 
-						if(d != null)
+						if(isLocked(lockSet) == false)
 						{
-							for(String lockName: s_lockNameSplitPattern.split(d))
-							{
-								lockNames.add(lockName);
-							}
-						}
-
-						if(isLocked(lockNames) == false)
-						{
-							list.add(new Tuple(a, b, c, lockNames));
+							list.add(new Tuple(
+								resultSet.getString(1),
+								resultSet.getString(2),
+								resultSet.getString(3),
+								lockSet
+							));
 						}
 					}
 				}
@@ -388,11 +381,11 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	private boolean isLocked(Set<String> lockNames)
+	private boolean isLocked(Set<String> lockSet)
 	{
 		for(Task task: m_runningTaskMap.values())
 		{
-			if(task.isLocked(lockNames))
+			if(task.isLocked(lockSet))
 			{
 				return true;
 			}
