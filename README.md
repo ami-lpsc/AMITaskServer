@@ -21,6 +21,32 @@ mvn assembly:assembly
 
 Generated standalone bundle: *target/AMITaskServer-X.X.X-bundle.zip*
 
+SQL table
+=========
+
+Supported SGBD: MySQL, Oracle, PostgreSQL, SQLite.
+
+	CREATE TABLE "router_task" (
+	  "id" int(11) NOT NULL,
+	  "name" varchar(128) NOT NULL,
+	  "command" varchar(1024) NOT NULL,
+	  "description" varchar(512) DEFAULT NULL,
+	  "commaSeparatedLocks" varchar(512) DEFAULT NULL,
+	  "serverName" varchar(128) NOT NULL,
+	  "running" int(1) NOT NULL DEFAULT '0',
+	  "success" int(1) NOT NULL DEFAULT '0',
+	  "priority" int(3) NOT NULL DEFAULT '0',
+	  "step" bigint(20) NOT NULL DEFAULT '0',
+	  "lastRunTime" bigint(20) NOT NULL DEFAULT '0',
+	  "lastRunDate" datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
+	);
+
+	ALTER TABLE `router_task`
+	 ADD UNIQUE KEY "id" ("id");
+
+	ALTER TABLE `router_task`
+	 MODIFY "id" int(11) NOT NULL AUTO_INCREMENT;
+
 Configuring AMITaskServer
 =========================
 
