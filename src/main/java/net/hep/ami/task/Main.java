@@ -48,30 +48,6 @@ public class Main implements Handler
 		}
 
 		/*-----------------------------------------------------------------*/
-		/* LOAD JDBC DRIVER                                                */
-		/*-----------------------------------------------------------------*/
-
-		String clazz;
-
-		/**/ if(jdbcUrl.startsWith("jdbc:mysql")) {
-			clazz = "org.gjt.mm.mysql.Driver";
-		}
-		else if(jdbcUrl.startsWith("jdbc:oracle")) {
-			clazz = "oracle.jdbc.driver.OracleDriver";
-		}
-		else if(jdbcUrl.startsWith("jdbc:postgresql")) {
-			clazz = "org.postgresql.Driver";
-		}
-		else if(jdbcUrl.startsWith("jdbc:sqlite")) {
-			clazz = "org.sqlite.JDBC";
-		}
-		else {
-			throw new Exception("unknown JDBC protocol");
-		}
-
-		Class.forName(clazz);
-
-		/*-----------------------------------------------------------------*/
 		/* SERVER INFORMATION                                              */
 		/*-----------------------------------------------------------------*/
 
