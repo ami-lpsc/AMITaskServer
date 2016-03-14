@@ -8,7 +8,7 @@ public class PriorityTableBuilder
 
 	public static List<Integer> build(int priorityNumber, float compressionFactor)
 	{
-		List<Integer> result = new ArrayList<Integer>();
+		List<Integer> result = new ArrayList<>();
 
 		/*-----------------------------------------------------------------*/
 

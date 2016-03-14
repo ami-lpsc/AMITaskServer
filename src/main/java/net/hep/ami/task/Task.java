@@ -11,48 +11,37 @@ public class Task
 
 	/*---------------------------------------------------------------------*/
 
-	private String m_id;
-	private String m_name;
-	private String m_command;
-
 	private Process m_process;
-
-	private Set<String> m_lockNames;
 
 	/*---------------------------------------------------------------------*/
 
-	public Task(String id, String name, String command, Set<String> lockNames) throws IOException
+	private String m_id;
+	private String m_name;
+	private String m_command;
+	private Set<String> m_lockSet;
+
+	/*---------------------------------------------------------------------*/
+
+	public Task(String id, String name, String command, Set<String> lockSet) throws IOException
 	{
-		m_id = id;
-		m_name = name;
-		m_command = command;
+		/*-----------------------------------------------------------------*/
+		/* EXECUTE COMMAND                                                 */
+		/*-----------------------------------------------------------------*/
 
 		m_process = Runtime.getRuntime().exec(s_isWindows ? new String[] {("cmd.exe"), "/C", command}
 		                                                  : new String[] {"/bin/bash", "-c", command}
 		);
 
-		m_lockNames = lockNames;
-	}
+		/*-----------------------------------------------------------------*/
+		/* SET INSTANCE VARIABLES                                          */
+		/*-----------------------------------------------------------------*/
 
-	/*---------------------------------------------------------------------*/
+		m_id = id;
+		m_name = name;
+		m_command = command;
+		m_lockSet = lockSet;
 
-	public String getId()
-	{
-		return m_id;
-	}
-
-	/*---------------------------------------------------------------------*/
-
-	public String getName()
-	{
-		return m_name;
-	}
-
-	/*---------------------------------------------------------------------*/
-
-	public String getCommand()
-	{
-		return m_command;
+		/*-----------------------------------------------------------------*/
 	}
 
 	/*---------------------------------------------------------------------*/
@@ -78,11 +67,32 @@ public class Task
 
 	/*---------------------------------------------------------------------*/
 
+	public String getId()
+	{
+		return m_id;
+	}
+
+	/*---------------------------------------------------------------------*/
+
+	public String getName()
+	{
+		return m_name;
+	}
+
+	/*---------------------------------------------------------------------*/
+
+	public String getCommand()
+	{
+		return m_command;
+	}
+
+	/*---------------------------------------------------------------------*/
+
 	public boolean isLocked(Set<String> lockNames)
 	{
 		for(String a: lockNames)
 		{
-			for(String b: m_lockNames)
+			for(String b: m_lockSet)
 			{
 				if(a.equalsIgnoreCase(b))
 				{

@@ -16,7 +16,7 @@ public class Querier
 
 	/*---------------------------------------------------------------------*/
 
-	public Querier(String url, String user, String pass) throws Exception
+	public Querier(String url, String user, String pass) throws ClassNotFoundException
 	{
 		/*-----------------------------------------------------------------*/
 		/* LOAD JDBC DRIVER                                                */
@@ -37,7 +37,7 @@ public class Querier
 			clazz = "org.sqlite.JDBC";
 		}
 		else {
-			throw new Exception("unknown JDBC protocol");
+			throw new ClassNotFoundException("unknown JDBC driver");
 		}
 
 		Class.forName(clazz);

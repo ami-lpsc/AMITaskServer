@@ -30,7 +30,7 @@ public class Scheduler extends Thread
 
 	private List<Integer> m_priorityTable = null;
 
-	private final Map<String, Task> m_runningTaskMap = new ConcurrentHashMap<String, Task>();
+	private final Map<String, Task> m_runningTaskMap = new ConcurrentHashMap<>();
 
 	/*---------------------------------------------------------------------*/
 
@@ -107,7 +107,7 @@ public class Scheduler extends Thread
 			{
 				/*---------------------------------------------------------*/
 
-				sleep(1000);
+				sleep(1000L);
 
 				/*---------------------------------------------------------*/
 
@@ -211,7 +211,7 @@ public class Scheduler extends Thread
 	{
 		/*-----------------------------------------------------------------*/
 
-		List<String> toBeRemoved = new ArrayList<String>();
+		List<String> toBeRemoved = new ArrayList<>();
 
 		for(Entry<String, Task> entry: m_runningTaskMap.entrySet())
 		{
@@ -261,14 +261,14 @@ public class Scheduler extends Thread
 		public String id;
 		public String name;
 		public String command;
-		public Set<String> lockNames;
+		public Set<String> lockSet;
 
-		public Tuple(String _id, String _name, String _command, Set<String> _lockNames)
+		public Tuple(String _id, String _name, String _command, Set<String> _lockSet)
 		{
 			id = _id;
 			name = _name;
 			command = _command;
-			lockNames = _lockNames;
+			lockSet = _lockSet;
 		}
 	}
 
@@ -307,7 +307,7 @@ public class Scheduler extends Thread
 
 			Set<String> lockNames;
 
-			List<Tuple> list = new ArrayList<Tuple>();
+			List<Tuple> list = new ArrayList<>();
 
 			do
 			{
@@ -322,7 +322,7 @@ public class Scheduler extends Thread
 
 				/*---------------------------------------------------------*/
 
-				sleep(1000 / (2 * m_numberOfPriorities));
+				sleep(1000L / (2 * m_numberOfPriorities));
 
 				/*---------------------------------------------------------*/
 
@@ -332,7 +332,7 @@ public class Scheduler extends Thread
 				{
 					while(resultSet.next())
 					{
-						lockNames = new HashSet<String>();
+						lockNames = new HashSet<>();
 
 						a = resultSet.getString(1);
 						b = resultSet.getString(2);
@@ -360,7 +360,7 @@ public class Scheduler extends Thread
 
 				/*---------------------------------------------------------*/
 
-			} while(list.size() == 0);
+			} while(list.isEmpty());
 
 			/*-------------------------------------------------------------*/
 
@@ -372,7 +372,7 @@ public class Scheduler extends Thread
 
 			info("Starting task `" + tuple.name + "`");
 
-			m_runningTaskMap.put(tuple.id, new Task(tuple.id, tuple.name, tuple.command, tuple.lockNames));
+			m_runningTaskMap.put(tuple.id, new Task(tuple.id, tuple.name, tuple.command, tuple.lockSet));
 
 			statement.executeUpdate("UPDATE router_task SET running = 1, success = 0, lastRunTime = '" + date.getTime() + "', lastRunDate = '" + net.hep.ami.mini.JettyHandler.s_simpleDateFormat.format(date) + "' WHERE id = '" + tuple.id + "'");
 
@@ -409,7 +409,7 @@ public class Scheduler extends Thread
 		Connection connection = m_querier.getConnection();
 		Statement statement = connection.createStatement();
 
-		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+		List<Map<String, String>> result = new ArrayList<>();
 
 		try
 		{
@@ -421,7 +421,7 @@ public class Scheduler extends Thread
 			{
 				while(resultSet.next())
 				{
-					map = new HashMap<String, String>();
+					map = new HashMap<>();
 
 					/*-----------------------------------------------------*/
 
