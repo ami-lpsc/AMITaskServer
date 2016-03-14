@@ -295,7 +295,7 @@ public class Scheduler extends Thread
 		try
 		{
 			/*-------------------------------------------------------------*/
-			/* SELECT TASK                                                 */
+			/* SELECT PRIORITY                                             */
 			/*-------------------------------------------------------------*/
 
 			int i = 0;
@@ -306,7 +306,7 @@ public class Scheduler extends Thread
 
 			java.sql.ResultSet resultSet;
 
-			List<Tuple> list = new ArrayList<>();
+			java.util.List<Tuple> tempTaskList = new ArrayList<>();
 
 			do
 			{
@@ -337,7 +337,7 @@ public class Scheduler extends Thread
 
 						if(isLocked(lockSet) == false)
 						{
-							list.add(new Tuple(
+							tempTaskList.add(new Tuple(
 								resultSet.getString(1),
 								resultSet.getString(2),
 								resultSet.getString(3),
@@ -353,11 +353,13 @@ public class Scheduler extends Thread
 
 				/*---------------------------------------------------------*/
 
-			} while(list.isEmpty());
+			} while(tempTaskList.isEmpty());
 
 			/*-------------------------------------------------------------*/
+			/* SELECT TASK                                                 */
+			/*-------------------------------------------------------------*/
 
-			Tuple tuple = list.get(m_random.nextInt(list.size()));
+			Tuple tuple = tempTaskList.get(m_random.nextInt(tempTaskList.size()));
 
 			/*-------------------------------------------------------------*/
 			/* RUN TASK                                                    */
