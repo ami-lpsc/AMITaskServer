@@ -41,12 +41,6 @@ Supported SGBD: MySQL, Oracle, PostgreSQL, SQLite. Schema for MySQL:
 	  "lastRunDate" datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
 	);
 
-	ALTER TABLE `router_task`
-	 ADD UNIQUE KEY "id" ("id");
-
-	ALTER TABLE `router_task`
-	 MODIFY "id" int(11) NOT NULL AUTO_INCREMENT;
-
 Configuring AMITaskServer
 =========================
 
