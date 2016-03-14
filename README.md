@@ -21,10 +21,10 @@ mvn assembly:assembly
 
 Generated standalone bundle: *target/AMITaskServer-X.X.X-bundle.zip*
 
-SQL table
-=========
+Task SQL table
+==============
 
-Supported SGBD: MySQL, Oracle, PostgreSQL, SQLite.
+Supported SGBD: MySQL, Oracle, PostgreSQL, SQLite. Schema for MySQL:
 
 	CREATE TABLE "router_task" (
 	  "id" int(11) NOT NULL,
