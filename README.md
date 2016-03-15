@@ -24,7 +24,9 @@ Generated standalone bundle: *target/AMITaskServer-X.X.X-bundle.zip*
 Task SQL table
 ==============
 
-Supported SGBD: MySQL, Oracle, PostgreSQL, SQLite. Schema for MySQL:
+AMITaskServer need a SQL table in order to store job definitions. Supported SGBD: MySQL, Oracle, PostgreSQL, SQLite.
+
+Schema for MySQL:
 
 	CREATE TABLE "router_task" (
 	  "id" int(11) NOT NULL,
@@ -38,18 +40,35 @@ Supported SGBD: MySQL, Oracle, PostgreSQL, SQLite. Schema for MySQL:
 	  "priority" int(3) NOT NULL DEFAULT '0',
 	  "step" bigint(20) NOT NULL DEFAULT '0',
 	  "lastRunTime" bigint(20) NOT NULL DEFAULT '0',
-	  "lastRunDate" datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
+	  "lastRunDate" datetime NOT NULL DEFAULT '1979-01-01 00:00:00'
+	);
+
+Schema for Oracle:
+
+	CREATE TABLE "router_task" (
+	  "id" number(10) NOT NULL,
+	  "name" varchar2(128) NOT NULL,
+	  "command" varchar2(1024) NOT NULL,
+	  "description" varchar2(512) DEFAULT NULL,
+	  "commaSeparatedLocks" varchar2(512) DEFAULT NULL,
+	  "serverName" varchar2(128) NOT NULL,
+	  "running" number(10) DEFAULT '0' NOT NULL,
+	  "success" number(10) DEFAULT '0' NOT NULL,
+	  "priority" number(10) DEFAULT '0' NOT NULL,
+	  "step" number(19) DEFAULT '0' NOT NULL,
+	  "lastRunTime" number(19) DEFAULT '0' NOT NULL,
+	  "lastRunDate" timestamp(0) DEFAULT TO_TIMESTAMP('1979-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') NOT NULL
 	);
 
 Configuring AMITaskServer
 =========================
 
-Example of configuration file (~/.ami/AMI.xml, /etc/ami/AMI.xml or java -Dami.conffile=path/AMI.xml ...):
+Configuration file template (~/.ami/AMI.xml, /etc/ami/AMI.xml or java -Dami.conffile=path/AMI.xml ...):
 
 	<?xml version="1.0" encoding="ISO-8859-1"?>
 
 	<properties>
-	  <property name="jdbc_url"><![CDATA[jdbc:mysql://localhost:3306/router]]></property>
+	  <property name="jdbc_url"><![CDATA[jdbc_url]]></property>
 	  <property name="router_user"><![CDATA[router_user]]></property>
 	  <property name="router_pass"><![CDATA[router_pass]]></property>
 
