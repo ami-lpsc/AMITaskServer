@@ -26,38 +26,38 @@ Task SQL table
 
 AMITaskServer need a SQL table in order to store job definitions. Supported SGBD: MySQL, Oracle, PostgreSQL, SQLite.
 
-Schema for MySQL:
+Schema for MySQL 5.0.3 and later:
 
 	CREATE TABLE "router_task" (
-	  "id" int(11) NOT NULL,
-	  "name" varchar(128) NOT NULL,
-	  "command" varchar(1024) NOT NULL,
-	  "description" varchar(512) DEFAULT NULL,
-	  "commaSeparatedLocks" varchar(512) DEFAULT NULL,
-	  "serverName" varchar(128) NOT NULL,
-	  "running" int(1) NOT NULL DEFAULT '0',
-	  "success" int(1) NOT NULL DEFAULT '0',
-	  "priority" int(3) NOT NULL DEFAULT '0',
-	  "step" bigint(20) NOT NULL DEFAULT '0',
-	  "lastRunTime" bigint(20) NOT NULL DEFAULT '0',
-	  "lastRunDate" datetime NOT NULL DEFAULT '1979-01-01 00:00:00'
+	  "id" INT(11) NOT NULL,
+	  "name" VARCHAR(128) NOT NULL,
+	  "command" VARCHAR(1024) NOT NULL,
+	  "description" VARCHAR(512) DEFAULT NULL,
+	  "commaSeparatedLocks" VARCHAR(512) DEFAULT NULL,
+	  "serverName" VARCHAR(128) NOT NULL,
+	  "running" INT(1) NOT NULL DEFAULT '0',
+	  "success" INT(1) NOT NULL DEFAULT '0',
+	  "priority" INT(3) NOT NULL DEFAULT '0',
+	  "step" bigINT(20) NOT NULL DEFAULT '0',
+	  "lastRunTime" BIGINT(20) NOT NULL DEFAULT '0',
+	  "lastRunDate" DATETIME NOT NULL DEFAULT '1979-01-01 00:00:00'
 	);
 
-Schema for Oracle:
+Schema for Oracle 11c and later:
 
 	CREATE TABLE "router_task" (
-	  "id" number(10) NOT NULL,
-	  "name" varchar2(128) NOT NULL,
-	  "command" varchar2(1024) NOT NULL,
-	  "description" varchar2(512) DEFAULT NULL,
-	  "commaSeparatedLocks" varchar2(512) DEFAULT NULL,
-	  "serverName" varchar2(128) NOT NULL,
-	  "running" number(10) DEFAULT '0' NOT NULL,
-	  "success" number(10) DEFAULT '0' NOT NULL,
-	  "priority" number(10) DEFAULT '0' NOT NULL,
-	  "step" number(19) DEFAULT '0' NOT NULL,
-	  "lastRunTime" number(19) DEFAULT '0' NOT NULL,
-	  "lastRunDate" timestamp(0) DEFAULT TO_TIMESTAMP('1979-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') NOT NULL
+	  "id" NUMBER(11) NOT NULL,
+	  "name" VARCHAR2(128) NOT NULL,
+	  "command" VARCHAR2(1024) NOT NULL,
+	  "description" VARCHAR2(512) DEFAULT NULL,
+	  "commaSeparatedLocks" VARCHAR2(512) DEFAULT NULL,
+	  "serverName" VARCHAR2(128) NOT NULL,
+	  "running" NUMBER(1) NOT NULL DEFAULT '0',
+	  "success" NUMBER(1) NOT NULL DEFAULT '0',
+	  "priority" NUMBER(3) NOT NULL DEFAULT '0',
+	  "step" NUMBER(20) NOT NULL DEFAULT '0',
+	  "lastRunTime" NUMBER(20) NOT NULL DEFAULT '0',
+	  "lastRunDate" TIMESTAMP NOT NULL DEFAULT TO_TIMESTAMP('1979-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS')
 	);
 
 Configuring AMITaskServer
