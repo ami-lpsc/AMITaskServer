@@ -28,19 +28,19 @@ AMITaskServer need a SQL table in order to store job definitions. Supported SGBD
 
 Schema for MySQL 5.0.3 and later:
 
-	CREATE TABLE "router_task" (
-	  "id" INT(11) NOT NULL,
-	  "name" VARCHAR(128) NOT NULL,
-	  "command" VARCHAR(1024) NOT NULL,
-	  "description" VARCHAR(512) DEFAULT NULL,
-	  "commaSeparatedLocks" VARCHAR(512) DEFAULT NULL,
-	  "serverName" VARCHAR(128) NOT NULL,
-	  "running" INT(1) NOT NULL DEFAULT '0',
-	  "success" INT(1) NOT NULL DEFAULT '0',
-	  "priority" INT(3) NOT NULL DEFAULT '0',
-	  "step" bigINT(20) NOT NULL DEFAULT '0',
-	  "lastRunTime" BIGINT(20) NOT NULL DEFAULT '0',
-	  "lastRunDate" DATETIME NOT NULL DEFAULT '1979-01-01 00:00:00'
+	CREATE TABLE `router_task` (
+	  `id` INT(11) NOT NULL,
+	  `name` VARCHAR(128) NOT NULL,
+	  `command` VARCHAR(1024) NOT NULL,
+	  `description` VARCHAR(512) DEFAULT NULL,
+	  `commaSeparatedLocks` VARCHAR(512) DEFAULT NULL,
+	  `serverName` VARCHAR(128) NOT NULL,
+	  `running` INT(1) DEFAULT '0' NOT NULL,
+	  `success` INT(1) DEFAULT '0' NOT NULL,
+	  `priority` INT(3) DEFAULT '0' NOT NULL,
+	  `step` BIGINT(20) DEFAULT '0' NOT NULL,
+	  `lastRunTime` BIGINT(20) DEFAULT '0' NOT NULL,
+	  `lastRunDate` DATETIME DEFAULT '1979-01-01 00:00:00' NOT NULL
 	);
 
 Schema for Oracle 11c and later:
@@ -52,12 +52,12 @@ Schema for Oracle 11c and later:
 	  "description" VARCHAR2(512) DEFAULT NULL,
 	  "commaSeparatedLocks" VARCHAR2(512) DEFAULT NULL,
 	  "serverName" VARCHAR2(128) NOT NULL,
-	  "running" NUMBER(1) NOT NULL DEFAULT '0',
-	  "success" NUMBER(1) NOT NULL DEFAULT '0',
-	  "priority" NUMBER(3) NOT NULL DEFAULT '0',
-	  "step" NUMBER(20) NOT NULL DEFAULT '0',
-	  "lastRunTime" NUMBER(20) NOT NULL DEFAULT '0',
-	  "lastRunDate" TIMESTAMP NOT NULL DEFAULT TO_TIMESTAMP('1979-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS')
+	  "running" NUMBER(1) DEFAULT '0' NOT NULL,
+	  "success" NUMBER(1) DEFAULT '0' NOT NULL,
+	  "priority" NUMBER(3) DEFAULT '0' NOT NULL,
+	  "step" NUMBER(20) DEFAULT '0' NOT NULL,
+	  "lastRunTime" NUMBER(20) DEFAULT '0' NOT NULL,
+	  "lastRunDate" TIMESTAMP(0) DEFAULT TO_TIMESTAMP('1979-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') NOT NULL
 	);
 
 Configuring AMITaskServer
