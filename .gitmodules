@@ -1,0 +1,3 @@
+[submodule "AMIMini"]
+	path = AMIMini
+	url = https://github.com/ami-lpsc/AMIMini.git

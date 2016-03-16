@@ -34,7 +34,7 @@ public class Task
 		m_lockSet = lockSet;
 
 		/*-----------------------------------------------------------------*/
-		/* EXECUTE COMMAND                                                 */
+		/* CREATE PROCESS                                                  */
 		/*-----------------------------------------------------------------*/
 
 		m_process = Runtime.getRuntime().exec(s_isWindows ? new String[] {("cmd.exe"), "/C", command}
