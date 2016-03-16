@@ -5,7 +5,9 @@
   <formats>
     <format>zip</format>
   </formats>
-  
+
+  <baseDirectory>${artifactId}</baseDirectory>
+
   <dependencySets>
     <!--******************************************************************-->
 
