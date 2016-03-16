@@ -26,8 +26,6 @@
       <groupId>net.hep.ami</groupId>
       <artifactId>AMIMini</artifactId>
       <version>${project.version}</version>
-      <systemPath>../AMIMini/target/AMIMini-${project.version}.jar</systemPath>
-      <scope>system</scope>
     </dependency>
 
     <!--******************************************************************-->
