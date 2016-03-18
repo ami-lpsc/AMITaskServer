@@ -127,6 +127,7 @@ public class Main implements Handler
 				      .append("<field name=\"success\"><![CDATA[" + map.get("success") + "]]></field>")
 				      .append("<field name=\"priority\"><![CDATA[" + map.get("priority") + "]]></field>")
 				      .append("<field name=\"step\"><![CDATA[" + map.get("step") + "]]></field>")
+				      .append("<field name=\"lastRunDate\"><![CDATA[" + map.get("lastRunDate") + "]]></field>")
 				      .append("</row>")
 				;
 			}
