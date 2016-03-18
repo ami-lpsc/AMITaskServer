@@ -10,7 +10,7 @@ public class Scheduler extends Thread
 {
 	/*---------------------------------------------------------------------*/
 
-	private static final Pattern s_lockSplitPattern = Pattern.compile("[^a-zA-Z0-9_]");
+	private static final Pattern s_lockSplitPattern = Pattern.compile("[^a-zA-Z0-9_\\-]");
 
 	/*---------------------------------------------------------------------*/
 
@@ -410,7 +410,7 @@ public class Scheduler extends Thread
 
 		try
 		{
-			ResultSet resultSet = statement.executeQuery("SELECT id, name, command, description, running, success FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "'");
+			ResultSet resultSet = statement.executeQuery("SELECT id, name, command, description, running, success, priority, step FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "'");
 
 			Map<String, String> map;
 
@@ -428,6 +428,8 @@ public class Scheduler extends Thread
 					map.put("description", resultSet.getString(4));
 					map.put("running", resultSet.getString(5));
 					map.put("success", resultSet.getString(6));
+					map.put("priority", resultSet.getString(7));
+					map.put("step", resultSet.getString(8));
 
 					/*-----------------------------------------------------*/
 
