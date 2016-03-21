@@ -35,9 +35,13 @@ then
   fi
 
   ###########################################################################
+  (
 
-  $JAVA_HOME/bin/java -Dami.conffile=$AMI_HOME/AMI.xml -classpath $AMICLASSPATH net.hep.ami.task.Main $PORT &> $AMI_HOME/log/AMITaskServer.out &
+    cd $AMI_HOME
 
+    $JAVA_HOME/bin/java -Dami.conffile=$AMI_HOME/AMI.xml -classpath $AMICLASSPATH net.hep.ami.task.Main $PORT &> $AMI_HOME/log/AMITaskServer.out &
+
+  )
   ###########################################################################
 fi
 
