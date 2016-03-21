@@ -323,7 +323,7 @@ public class Scheduler extends Thread
 
 				/*---------------------------------------------------------*/
 
-				sleep(500L / (2 * m_numberOfPriorities));
+				sleep(1000L / (2 * m_numberOfPriorities));
 
 				/*---------------------------------------------------------*/
 
