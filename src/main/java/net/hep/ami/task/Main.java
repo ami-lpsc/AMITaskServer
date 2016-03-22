@@ -123,6 +123,7 @@ public class Main implements Handler
 				      .append("<field name=\"name\"><![CDATA[" + map.get("name") + "]]></field>")
 				      .append("<field name=\"command\"><![CDATA[" + map.get("command") + "]]></field>")
 				      .append("<field name=\"description\"><![CDATA[" + map.get("description") + "]]></field>")
+				      .append("<field name=\"commaSeparatedLocks\"><![CDATA[" + map.get("commaSeparatedLocks") + "]]></field>")
 				      .append("<field name=\"running\"><![CDATA[" + map.get("running") + "]]></field>")
 				      .append("<field name=\"success\"><![CDATA[" + map.get("success") + "]]></field>")
 				      .append("<field name=\"priority\"><![CDATA[" + map.get("priority") + "]]></field>")

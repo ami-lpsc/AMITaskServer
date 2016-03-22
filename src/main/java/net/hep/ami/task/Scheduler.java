@@ -410,7 +410,7 @@ public class Scheduler extends Thread
 
 		try
 		{
-			ResultSet resultSet = statement.executeQuery("SELECT id, name, command, description, running, success, priority, step, lastRunDate FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "'");
+			ResultSet resultSet = statement.executeQuery("SELECT id, name, command, description, commaSeparatedLocks, running, success, priority, step, lastRunDate FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "'");
 
 			Map<String, String> map;
 
@@ -426,11 +426,12 @@ public class Scheduler extends Thread
 					map.put("name", resultSet.getString(2));
 					map.put("command", resultSet.getString(3));
 					map.put("description", resultSet.getString(4));
-					map.put("running", resultSet.getString(5));
-					map.put("success", resultSet.getString(6));
-					map.put("priority", resultSet.getString(7));
-					map.put("step", resultSet.getString(8));
-					map.put("lastRunDate", resultSet.getString(9));
+					map.put("commaSeparatedLocks", resultSet.getString(5));
+					map.put("running", resultSet.getString(6));
+					map.put("success", resultSet.getString(7));
+					map.put("priority", resultSet.getString(8));
+					map.put("step", resultSet.getString(9));
+					map.put("lastRunDate", resultSet.getString(10));
 
 					/*-----------------------------------------------------*/
 
