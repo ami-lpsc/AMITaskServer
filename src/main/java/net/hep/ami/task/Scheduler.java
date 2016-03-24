@@ -4,13 +4,23 @@ import java.sql.*;
 import java.util.*;
 import java.util.Map.*;
 import java.util.regex.*;
+
+import java.util.logging.*;
 import java.util.concurrent.*;
 
 public class Scheduler extends Thread
 {
 	/*---------------------------------------------------------------------*/
 
-	private static final Pattern s_lockSplitPattern = Pattern.compile("[^a-zA-Z0-9_\\-]");
+	private static final Pattern s_lockSplitPattern = Pattern.compile(
+		"[^a-zA-Z0-9_\\-]"
+	);
+
+	/*---------------------------------------------------------------------*/
+
+	private static final Logger s_logger = Logger.getLogger(
+		Scheduler.class.getName()
+	);
 
 	/*---------------------------------------------------------------------*/
 
@@ -74,7 +84,7 @@ public class Scheduler extends Thread
 		}
 		catch(Exception e)
 		{
-			warn(e.getMessage());
+			s_logger.severe(e.getMessage());
 		}
 
 		/*-----------------------------------------------------------------*/
@@ -92,7 +102,7 @@ public class Scheduler extends Thread
 				}
 				catch(Exception e)
 				{
-					warn(e.getMessage());
+					s_logger.severe(e.getMessage());
 				}
 			}
 		});
@@ -126,25 +136,11 @@ public class Scheduler extends Thread
 			}
 			catch(Exception e)
 			{
-				warn(e.getMessage());
+				s_logger.severe(e.getMessage());
 			}
 		}
 
 		/*-----------------------------------------------------------------*/
-	}
-
-	/*---------------------------------------------------------------------*/
-
-	private void info(String msg)
-	{
-		org.eclipse.jetty.util.log.Log.getRootLogger().info(msg);
-	}
-
-	/*---------------------------------------------------------------------*/
-
-	private void warn(String msg)
-	{
-		org.eclipse.jetty.util.log.Log.getRootLogger().warn(msg);
 	}
 
 	/*---------------------------------------------------------------------*/
@@ -185,7 +181,7 @@ public class Scheduler extends Thread
 
 		for(Task task: m_runningTaskMap.values())
 		{
-			warn("Killing task `" + task.getName() + "`");
+			s_logger.warning("Killing task `" + task.getName() + "`");
 
 			task.destroy();
 		}
@@ -245,7 +241,7 @@ public class Scheduler extends Thread
 					statement.executeUpdate("UPDATE router_task SET running = 0, success = 0 WHERE id = '" + taskId + "'");
 				}
 
-				info("Task `" + task.getName() + "` finished");
+				s_logger.info("Task `" + task.getName() + "` finished");
 			}
 		}
 		finally
@@ -278,11 +274,15 @@ public class Scheduler extends Thread
 
 	private Random m_random = new Random();
 
+	private volatile boolean m_taskLock = false;
+
+	/*---------------------------------------------------------------------*/
+
 	private void startTask() throws Exception
 	{
 		/*-----------------------------------------------------------------*/
 
-		if(m_numberOfPriorities == 0 || m_runningTaskMap.size() >= m_maxTasks)
+		if(m_taskLock || m_numberOfPriorities == 0 || m_runningTaskMap.size() >= m_maxTasks)
 		{
 			return;
 		}
@@ -367,7 +367,7 @@ public class Scheduler extends Thread
 			/* RUN TASK                                                    */
 			/*-------------------------------------------------------------*/
 
-			info("Starting task `" + tuple.name + "`");
+			s_logger.info("Starting task `" + tuple.name + "`");
 
 			m_runningTaskMap.put(tuple.id, new Task(tuple.id, tuple.name, tuple.command, tuple.lockSet));
 
@@ -449,6 +449,22 @@ public class Scheduler extends Thread
 		}
 
 		return result;
+	}
+
+	/*---------------------------------------------------------------------*/
+	/*---------------------------------------------------------------------*/
+
+	public void lock()
+	{
+		m_taskLock = true;
+	}
+
+	/*---------------------------------------------------------------------*/
+	/*---------------------------------------------------------------------*/
+
+	public void unlock()
+	{
+		m_taskLock = false;
 	}
 
 	/*---------------------------------------------------------------------*/

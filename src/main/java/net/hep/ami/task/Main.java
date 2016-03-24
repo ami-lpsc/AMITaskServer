@@ -137,6 +137,28 @@ public class Main implements Handler
 		}
 
 		/*-----------------------------------------------------------------*/
+		/* LockServer                                                      */
+		/*-----------------------------------------------------------------*/
+
+		else if(command.equals("LockServer"))
+		{
+			checkIP(config, ip);
+
+			m_scheduler.lock();
+		}
+
+		/*-----------------------------------------------------------------*/
+		/* UnlockServer                                                    */
+		/*-----------------------------------------------------------------*/
+
+		else if(command.equals("UnlockServer"))
+		{
+			checkIP(config, ip);
+
+			m_scheduler.unlock();
+		}
+
+		/*-----------------------------------------------------------------*/
 		/* StopServer                                                      */
 		/*-----------------------------------------------------------------*/
 
@@ -182,6 +204,28 @@ public class Main implements Handler
 			checkIP(config, ip);
 
 			result.append("Get task status");
+		}
+
+		/*-----------------------------------------------------------------*/
+		/* LockServer                                                      */
+		/*-----------------------------------------------------------------*/
+
+		else if(command.equals("LockServer"))
+		{
+			checkIP(config, ip);
+
+			result.append("Lock the server");
+		}
+
+		/*-----------------------------------------------------------------*/
+		/* UnlockServer                                                    */
+		/*-----------------------------------------------------------------*/
+
+		else if(command.equals("UnlockServer"))
+		{
+			checkIP(config, ip);
+
+			result.append("Unlock the server");
 		}
 
 		/*-----------------------------------------------------------------*/
