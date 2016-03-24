@@ -137,10 +137,10 @@ public class Main implements Handler
 		}
 
 		/*-----------------------------------------------------------------*/
-		/* LockServer                                                      */
+		/* LockScheduler                                                   */
 		/*-----------------------------------------------------------------*/
 
-		else if(command.equals("LockServer"))
+		else if(command.equals("LockScheduler"))
 		{
 			checkIP(config, ip);
 
@@ -148,10 +148,10 @@ public class Main implements Handler
 		}
 
 		/*-----------------------------------------------------------------*/
-		/* UnlockServer                                                    */
+		/* UnlockScheduler                                                 */
 		/*-----------------------------------------------------------------*/
 
-		else if(command.equals("UnlockServer"))
+		else if(command.equals("UnlockScheduler"))
 		{
 			checkIP(config, ip);
 
@@ -207,10 +207,10 @@ public class Main implements Handler
 		}
 
 		/*-----------------------------------------------------------------*/
-		/* LockServer                                                      */
+		/* LockScheduler                                                   */
 		/*-----------------------------------------------------------------*/
 
-		else if(command.equals("LockServer"))
+		else if(command.equals("LockScheduler"))
 		{
 			checkIP(config, ip);
 
@@ -218,10 +218,10 @@ public class Main implements Handler
 		}
 
 		/*-----------------------------------------------------------------*/
-		/* UnlockServer                                                    */
+		/* UnlockScheduler                                                 */
 		/*-----------------------------------------------------------------*/
 
-		else if(command.equals("UnlockServer"))
+		else if(command.equals("UnlockScheduler"))
 		{
 			checkIP(config, ip);
 
