@@ -214,7 +214,7 @@ public class Main implements Handler
 		{
 			checkIP(config, ip);
 
-			result.append("Lock the server");
+			result.append("Lock the scheduler");
 		}
 
 		/*-----------------------------------------------------------------*/
@@ -225,7 +225,7 @@ public class Main implements Handler
 		{
 			checkIP(config, ip);
 
-			result.append("Unlock the server");
+			result.append("Unlock the scheduler");
 		}
 
 		/*-----------------------------------------------------------------*/
