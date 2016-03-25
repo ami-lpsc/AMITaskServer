@@ -456,9 +456,18 @@ public class Scheduler extends Thread
 
 	public void lock()
 	{
-		s_logger.info("Scheduler locked");
-
 		m_taskLock = true;
+
+		try
+		{
+			Thread.sleep(500);
+		}
+		catch(InterruptedException e)
+		{
+			/* IGNORE */
+		}
+
+		s_logger.info("Scheduler locked");
 	}
 
 	/*---------------------------------------------------------------------*/
@@ -466,9 +475,18 @@ public class Scheduler extends Thread
 
 	public void unlock()
 	{
-		s_logger.info("Scheduler unlocked");
-
 		m_taskLock = false;
+
+		try
+		{
+			Thread.sleep(500);
+		}
+		catch(InterruptedException e)
+		{
+			/* IGNORE */
+		}
+
+		s_logger.info("Scheduler unlocked");
 	}
 
 	/*---------------------------------------------------------------------*/
