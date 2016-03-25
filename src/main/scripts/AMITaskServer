@@ -16,18 +16,25 @@ AMI_HOME=$(cd $(dirname $THIS_SCRIPT) && pwd)
 #############################################################################
 
 start() {
-    sleep 2
     $AMI_HOME/startAMITaskServer.sh
 }
 
 stop() {
-    sleep 2
     $AMI_HOME/stopAMITaskServer.sh
 }
 
 restart() {
-    stop
-    start
+    $AMI_HOME/stopAMITaskServer.sh
+    sleep 2
+    $AMI_HOME/startAMITaskServer.sh
+}
+
+lock() {
+    $AMI_HOME/lockAMITaskServer.sh
+}
+
+unlock() {
+    $AMI_HOME/unlockAMITaskServer.sh
 }
 
 status() {
@@ -51,11 +58,15 @@ case "$1" in
   reload|restart|condrestart)
     restart
     ;;
+  lock)
+    lock
+  unlock)
+    unlock
   status)
     status
     ;;
   *)
-    echo "Usage: $0 {start|stop|reload|restart|condrestart|status}"
+    echo "Usage: $0 {start|stop|reload|restart|condrestart|lock|unlock|status}"
     exit 1
 esac
 
