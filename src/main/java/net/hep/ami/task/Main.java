@@ -294,7 +294,7 @@ public class Main implements Handler
 		}
 		catch(Exception e)
 		{
-			System.err.println(
+			java.util.logging.Logger.getLogger(Main.class.getName()).severe(
 				e.getMessage()
 			);
 

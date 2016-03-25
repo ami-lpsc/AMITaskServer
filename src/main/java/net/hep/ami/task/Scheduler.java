@@ -456,6 +456,8 @@ public class Scheduler extends Thread
 
 	public void lock()
 	{
+		s_logger.info("Scheduler locked");
+
 		m_taskLock = true;
 	}
 
@@ -464,6 +466,8 @@ public class Scheduler extends Thread
 
 	public void unlock()
 	{
+		s_logger.info("Scheduler unlocked");
+
 		m_taskLock = false;
 	}
 
