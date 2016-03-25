@@ -14,7 +14,6 @@ AMI_HOME=$(cd $(dirname $THIS_SCRIPT) && pwd)
 #############################################################################
 
 $AMI_HOME/stopAMITaskServer.sh
-sleep 2
 $AMI_HOME/startAMITaskServer.sh
 
 #############################################################################

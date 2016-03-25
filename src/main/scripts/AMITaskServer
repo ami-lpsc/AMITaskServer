@@ -15,28 +15,6 @@ AMI_HOME=$(cd $(dirname $THIS_SCRIPT) && pwd)
 
 #############################################################################
 
-start() {
-    $AMI_HOME/startAMITaskServer.sh
-}
-
-stop() {
-    $AMI_HOME/stopAMITaskServer.sh
-}
-
-restart() {
-    $AMI_HOME/stopAMITaskServer.sh
-    sleep 2
-    $AMI_HOME/startAMITaskServer.sh
-}
-
-lock() {
-    $AMI_HOME/lockAMITaskServer.sh
-}
-
-unlock() {
-    $AMI_HOME/unlockAMITaskServer.sh
-}
-
 status() {
   if [[ -z $(ps -ef | grep "net\.hep\.ami\.task\.Main") ]]
   then
@@ -50,23 +28,25 @@ status() {
 
 case "$1" in
   start)
-    start
+    $AMI_HOME/startAMITaskServer.sh
     ;;
   stop)
-    stop
+    $AMI_HOME/stopAMITaskServer.sh
     ;;
-  reload|restart|condrestart)
-    restart
+  restart)
+    $AMI_HOME/restartAMITaskServer.sh
     ;;
   lock)
-    lock
+    $AMI_HOME/lockAMITaskServer.sh
+    ;;
   unlock)
-    unlock
+    $AMI_HOME/unlockAMITaskServer.sh
+    ;;
   status)
     status
     ;;
   *)
-    echo "Usage: $0 {start|stop|reload|restart|condrestart|lock|unlock|status}"
+    echo "Usage: $0 {start|stop|restart|lock|unlock|status}"
     exit 1
 esac
 
