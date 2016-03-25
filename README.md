@@ -82,12 +82,20 @@ Configuration file template (~/.ami/AMI.xml, /etc/ami/AMI.xml or java -Dami.conf
 Using AMITaskServer
 ===================
 
-	./AMITaskServer --help
-	./AMITaskServer status
 	./AMITaskServer start
 	./AMITaskServer stop
+	./AMITaskServer lock
+	./AMITaskServer unlock
+	./AMITaskServer status
+	./AMITaskServer --help
 
 Install as Linux service
 ========================
 
 	./installAMITaskServer.sh
+
+	service AMITaskServer start
+	service AMITaskServer stop
+	service AMITaskServer lock
+	service AMITaskServer unlock
+	service AMITaskServer status
