@@ -199,6 +199,8 @@ public class Scheduler extends Thread
 		try
 		{
 			statement.executeUpdate("UPDATE router_task SET running = 0 WHERE serverName = '" + m_serverName.replace("'", "''") + "'");
+
+			connection.commit();
 		}
 		finally
 		{
@@ -248,6 +250,8 @@ public class Scheduler extends Thread
 
 				s_logger.info("Task `" + task.getName() + "` finished");
 			}
+
+			connection.commit();
 		}
 		finally
 		{
@@ -379,6 +383,12 @@ public class Scheduler extends Thread
 			m_runningTaskMap.put(tuple.id, new Task(tuple.id, tuple.name, tuple.command, tuple.lockSet));
 
 			statement.executeUpdate("UPDATE router_task SET running = 1, success = 0, lastRunTime = '" + date.getTime() + "', lastRunDate = '" + m_simpleDateFormat.format(date) + "' WHERE id = '" + tuple.id + "'");
+
+			/*-------------------------------------------------------------*/
+			/* COMMIT                                                      */
+			/*-------------------------------------------------------------*/
+
+			connection.commit();
 
 			/*-------------------------------------------------------------*/
 		}
