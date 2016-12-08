@@ -7,7 +7,7 @@ public class Task
 {
 	/*---------------------------------------------------------------------*/
 
-	private static final boolean s_isWindows = System.getProperty("os.name").startsWith("Windows");
+	private static final boolean IS_WINDOWS = System.getProperty("os.name").toLowerCase().startsWith("windows");
 
 	/*---------------------------------------------------------------------*/
 
@@ -37,8 +37,8 @@ public class Task
 		/* CREATE PROCESS                                                  */
 		/*-----------------------------------------------------------------*/
 
-		m_process = Runtime.getRuntime().exec(s_isWindows ? new String[] {("cmd.exe"), "/C", command}
-		                                                  : new String[] {"/bin/bash", "-c", command}
+		m_process = Runtime.getRuntime().exec(IS_WINDOWS ? new String[] {("cmd.exe"), "/C", command}
+		                                                 : new String[] {"/bin/bash", "-c", command}
 		);
 
 		/*-----------------------------------------------------------------*/
