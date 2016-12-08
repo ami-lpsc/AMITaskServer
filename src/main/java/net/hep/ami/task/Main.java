@@ -182,7 +182,7 @@ public class Main implements Handler
 	/*---------------------------------------------------------------------*/
 
 	@Override
-	public StringBuilder help(Server server, Map<String, String> config, String command, Map<String, String> arguments, String ip) throws Exception
+	public StringBuilder help(Map<String, String> config, String command, String ip) throws Exception
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -247,6 +247,14 @@ public class Main implements Handler
 		}
 
 		return result;
+	}
+
+	/*---------------------------------------------------------------------*/
+
+	@Override
+	public StringBuilder usage(Map<String, String> config, String command, String ip) throws Exception
+	{
+		return null;
 	}
 
 	/*---------------------------------------------------------------------*/

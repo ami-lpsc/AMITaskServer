@@ -1,6 +1,7 @@
 package net.hep.ami.task;
 
 import java.sql.*;
+import java.text.*;
 import java.util.*;
 import java.util.Map.*;
 import java.util.regex.*;
@@ -256,10 +257,10 @@ public class Scheduler extends Thread
 
 	private static class Tuple
 	{
-		public String id;
-		public String name;
-		public String command;
-		public Set<String> lockSet;
+		public final String id;
+		public final String name;
+		public final String command;
+		public final Set<String> lockSet;
 
 		public Tuple(String _id, String _name, String _command, Set<String> _lockSet)
 		{
@@ -275,6 +276,8 @@ public class Scheduler extends Thread
 	private Random m_random = new Random();
 
 	private volatile boolean m_taskLock = false;
+
+	private SimpleDateFormat m_simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
 	/*---------------------------------------------------------------------*/
 
@@ -371,7 +374,7 @@ public class Scheduler extends Thread
 
 			m_runningTaskMap.put(tuple.id, new Task(tuple.id, tuple.name, tuple.command, tuple.lockSet));
 
-			statement.executeUpdate("UPDATE router_task SET running = 1, success = 0, lastRunTime = '" + date.getTime() + "', lastRunDate = '" + net.hep.ami.mini.JettyHandler.s_simpleDateFormat.format(date) + "' WHERE id = '" + tuple.id + "'");
+			statement.executeUpdate("UPDATE router_task SET running = 1, success = 0, lastRunTime = '" + date.getTime() + "', lastRunDate = '" + m_simpleDateFormat.format(date) + "' WHERE id = '" + tuple.id + "'");
 
 			/*-------------------------------------------------------------*/
 		}

@@ -1,58 +1,58 @@
 <assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3 http://maven.apache.org/xsd/assembly-1.1.3.xsd">
 
-  <id>bundle</id>
+	<id>bundle</id>
 
-  <formats>
-    <format>zip</format>
-  </formats>
+	<formats>
+		<format>zip</format>
+	</formats>
 
-  <baseDirectory>${artifactId}</baseDirectory>
+	<baseDirectory>${artifactId}</baseDirectory>
 
-  <dependencySets>
-    <!--******************************************************************-->
+	<dependencySets>
+		<!--***************************************************************-->
 
-    <dependencySet>
-      <outputDirectory>lib</outputDirectory>
-      <outputFileNameMapping>${artifact.artifactId}-${artifact.version}.${artifact.extension}</outputFileNameMapping>
-      <useProjectArtifact>true</useProjectArtifact>
-    </dependencySet>
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+			<outputFileNameMapping>${artifact.artifactId}-${artifact.version}.${artifact.extension}</outputFileNameMapping>
+			<useProjectArtifact>true</useProjectArtifact>
+		</dependencySet>
 
-    <!--******************************************************************-->
-  </dependencySets>
+		<!--***************************************************************-->
+	</dependencySets>
 
-  <fileSets>
-    <!--******************************************************************-->
+	<fileSets>
+		<!--***************************************************************-->
 
-    <fileSet>
-      <directory>${project.basedir}</directory>
-      <outputDirectory></outputDirectory>
-      <includes>
-        <include>LICENSE</include>
-      </includes>
-    </fileSet>
+		<fileSet>
+			<directory>${project.basedir}</directory>
+			<outputDirectory></outputDirectory>
+			<includes>
+				<include>LICENSE</include>
+			</includes>
+		</fileSet>
 
-    <!--******************************************************************-->
+		<!--***************************************************************-->
 
-    <fileSet>
-      <directory>${project.build.scriptSourceDirectory}</directory>
-      <outputDirectory></outputDirectory>
-      <includes>
-        <include>AMITaskServer</include>
-        <include>*.sh</include>
-      </includes>
-    </fileSet>
+		<fileSet>
+			<directory>${project.build.scriptSourceDirectory}</directory>
+			<outputDirectory></outputDirectory>
+			<includes>
+				<include>AMITaskServer</include>
+				<include>*.sh</include>
+			</includes>
+		</fileSet>
 
-    <!--******************************************************************-->
+		<!--***************************************************************-->
 
-    <fileSet>
-      <directory>${project.build.scriptSourceDirectory}</directory>
-      <outputDirectory>log</outputDirectory>
-      <excludes>
-        <exclude>*/**</exclude>
-      </excludes>
-    </fileSet>
+		<fileSet>
+			<directory>${project.build.scriptSourceDirectory}</directory>
+			<outputDirectory>log</outputDirectory>
+			<excludes>
+				<exclude>*/**</exclude>
+			</excludes>
+		</fileSet>
 
-    <!--******************************************************************-->
-  </fileSets>
+		<!--***************************************************************-->
+	</fileSets>
 
 </assembly>
