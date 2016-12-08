@@ -9,9 +9,9 @@ public class Main implements Handler
 {
 	/*---------------------------------------------------------------------*/
 
-	private static final int s_maxTasksDefault = 10;
+	private static final int MAX_TASKS_DEFAULT = 10;
 
-	private static final float s_compressionDefault = 2.0f;
+	private static final float COMPRESSION_DEFAULT = 2.0f;
 
 	private static final Pattern s_ipSplitPattern = Pattern.compile("[^0-9\\.]");
 
@@ -51,7 +51,7 @@ public class Main implements Handler
 
 		s = config.get("max_tasks");
 
-		int maxTasks = (s != null) ? Integer.parseInt(s) : s_maxTasksDefault;
+		int maxTasks = (s != null) ? Integer.parseInt(s) : MAX_TASKS_DEFAULT;
 
 		if(maxTasks < 1)
 		{
@@ -62,7 +62,7 @@ public class Main implements Handler
 
 		s = config.get("compression");
 
-		Float compression = (s != null) ? Float.parseFloat(s) : s_compressionDefault;
+		Float compression = (s != null) ? Float.parseFloat(s) : COMPRESSION_DEFAULT;
 
 		if(compression < 1.0)
 		{
