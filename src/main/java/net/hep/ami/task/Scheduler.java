@@ -161,7 +161,11 @@ public class Scheduler extends Thread
 				                                        : 0x00000000000000000
 				;
 
-				m_priorityTable = PriorityTableBuilder.build(m_numberOfPriorities, m_compression);
+				m_priorityTable = PriorityTableBuilder.build(
+					m_numberOfPriorities
+					,
+					m_compression
+				);
 			}
 			finally
 			{
