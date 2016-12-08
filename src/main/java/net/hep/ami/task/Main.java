@@ -112,8 +112,6 @@ public class Main implements Handler
 
 		else if(command.equals("GetTasksStatus"))
 		{
-			checkIP(config, ip);
-
 			result.append("<rowset>");
 
 			for(Map<String, String> map: m_scheduler.getTasksStatus())

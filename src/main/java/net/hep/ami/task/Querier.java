@@ -59,7 +59,7 @@ public class Querier
 
 	public Connection getConnection() throws SQLException
 	{
-		if(m_connection == null || m_connection.isClosed())
+		if(m_connection == null || m_connection.isClosed() != false)
 		{
 			m_connection = DriverManager.getConnection(
 				m_url,
@@ -69,6 +69,16 @@ public class Querier
 		}
 
 		return m_connection;
+	}
+
+	/*---------------------------------------------------------------------*/
+
+	public void close() throws SQLException
+	{
+		if(m_connection != null && m_connection.isClosed() == false)
+		{
+			m_connection.close();
+		}
 	}
 
 	/*---------------------------------------------------------------------*/

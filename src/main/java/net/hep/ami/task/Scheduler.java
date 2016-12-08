@@ -88,6 +88,15 @@ public class Scheduler extends Thread
 			s_logger.severe(e.getMessage());
 		}
 
+		try
+		{
+			m_querier.close();
+		}
+		catch(Exception e)
+		{
+			s_logger.severe(e.getMessage());
+		}
+
 		/*-----------------------------------------------------------------*/
 		/* FINALIZE SCHEDULER                                              */
 		/*-----------------------------------------------------------------*/
@@ -100,6 +109,15 @@ public class Scheduler extends Thread
 				try
 				{
 					removeAllTasks();
+				}
+				catch(Exception e)
+				{
+					s_logger.severe(e.getMessage());
+				}
+
+				try
+				{
+					m_querier.close();
 				}
 				catch(Exception e)
 				{
