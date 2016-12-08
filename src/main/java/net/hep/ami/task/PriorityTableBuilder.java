@@ -6,6 +6,10 @@ public class PriorityTableBuilder
 {
 	/*---------------------------------------------------------------------*/
 
+	private PriorityTableBuilder() {}
+
+	/*---------------------------------------------------------------------*/
+
 	public static List<Integer> build(int numberOfPriorities, float compression)
 	{
 		List<Integer> result = //
