@@ -2,10 +2,11 @@ package net.hep.ami.task;
 
 import java.util.*;
 import java.util.regex.*;
+import java.util.logging.*;
 
 import net.hep.ami.mini.*;
 
-public class Main implements Handler
+public class Main implements AMIHandler
 {
 	/*---------------------------------------------------------------------*/
 
@@ -22,7 +23,7 @@ public class Main implements Handler
 	/*---------------------------------------------------------------------*/
 
 	@Override
-	public void init(Server server, Map<String, String> config) throws Exception
+	public void init(AMIServer server, Map<String, String> config) throws Exception
 	{
 		String s;
 
@@ -81,7 +82,7 @@ public class Main implements Handler
 	/*---------------------------------------------------------------------*/
 
 	@Override
-	public StringBuilder exec(Server server, Map<String, String> config, String command, Map<String, String> arguments, String ip) throws Exception
+	public StringBuilder exec(AMIServer server, Map<String, String> config, String command, Map<String, String> arguments, String ip) throws Exception
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -293,15 +294,15 @@ public class Main implements Handler
 	{
 		try
 		{
-			Server server = new Server(args.length == 1 ? Integer.parseInt(args[0]) : 1357, new Main());
+			AMIServer server = new AMIServer(args.length == 1 ? Integer.parseInt(args[0]) : 1357, new Main());
 
 			server.start();
 			server.join();
 		}
 		catch(Exception e)
 		{
-			java.util.logging.Logger.getLogger(Main.class.getName()).severe(
-				e.getMessage()
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE,
+				e.getMessage(), e
 			);
 
 			System.exit(1);

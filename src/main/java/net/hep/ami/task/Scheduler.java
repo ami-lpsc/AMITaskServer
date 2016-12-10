@@ -5,7 +5,6 @@ import java.text.*;
 import java.util.*;
 import java.util.Map.*;
 import java.util.regex.*;
-
 import java.util.logging.*;
 import java.util.concurrent.*;
 
@@ -85,7 +84,7 @@ public class Scheduler extends Thread
 		}
 		catch(Exception e)
 		{
-			s_logger.severe(e.getMessage());
+			s_logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 
 		try
@@ -94,7 +93,7 @@ public class Scheduler extends Thread
 		}
 		catch(Exception e)
 		{
-			s_logger.severe(e.getMessage());
+			s_logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 
 		/*-----------------------------------------------------------------*/
@@ -112,7 +111,7 @@ public class Scheduler extends Thread
 				}
 				catch(Exception e)
 				{
-					s_logger.severe(e.getMessage());
+					s_logger.log(Level.SEVERE, e.getMessage(), e);
 				}
 
 				try
@@ -121,7 +120,7 @@ public class Scheduler extends Thread
 				}
 				catch(Exception e)
 				{
-					s_logger.severe(e.getMessage());
+					s_logger.log(Level.SEVERE, e.getMessage(), e);
 				}
 			}
 		});
@@ -155,7 +154,7 @@ public class Scheduler extends Thread
 			}
 			catch(Exception e)
 			{
-				s_logger.severe(e.getMessage());
+				s_logger.log(Level.SEVERE, e.getMessage(), e);
 			}
 		}
 
@@ -204,7 +203,7 @@ public class Scheduler extends Thread
 
 		for(Task task: m_runningTaskMap.values())
 		{
-			s_logger.warning("Killing task `" + task.getName() + "`");
+			s_logger.log(Level.WARNING, "Killing task `" + task.getName() + "`");
 
 			task.destroy();
 		}
@@ -266,7 +265,7 @@ public class Scheduler extends Thread
 					statement.executeUpdate("UPDATE router_task SET running = 0, success = 0 WHERE id = '" + taskId + "'");
 				}
 
-				s_logger.info("Task `" + task.getName() + "` finished");
+				s_logger.log(Level.INFO, "Task `" + task.getName() + "` finished");
 			}
 
 			connection.commit();
@@ -396,7 +395,7 @@ public class Scheduler extends Thread
 			/* RUN TASK                                                    */
 			/*-------------------------------------------------------------*/
 
-			s_logger.info("Starting task `" + tuple.name + "`");
+			s_logger.log(Level.INFO, "Starting task `" + tuple.name + "`");
 
 			m_runningTaskMap.put(tuple.id, new Task(tuple.id, tuple.name, tuple.command, tuple.lockSet));
 
@@ -502,7 +501,7 @@ public class Scheduler extends Thread
 			/* IGNORE */
 		}
 
-		s_logger.info("Scheduler locked");
+		s_logger.log(Level.INFO, "Scheduler locked");
 	}
 
 	/*---------------------------------------------------------------------*/
@@ -521,7 +520,7 @@ public class Scheduler extends Thread
 			/* IGNORE */
 		}
 
-		s_logger.info("Scheduler unlocked");
+		s_logger.log(Level.INFO, "Scheduler unlocked");
 	}
 
 	/*---------------------------------------------------------------------*/
