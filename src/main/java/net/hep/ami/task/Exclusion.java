@@ -23,18 +23,9 @@ public class Exclusion
 
 		/*-----------------------------------------------------------------*/
 
-		try
+		try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream())))
 		{
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-			try
-			{
-				return connection.getResponseCode() == 200 && bufferedReader.readLine().equals("0");
-			}
-			finally
-			{
-				bufferedReader.close();
-			}
+			return connection.getResponseCode() == 200 && bufferedReader.readLine().equals("0");
 		}
 		finally
 		{
