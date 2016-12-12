@@ -8,7 +8,7 @@ Compiling AMITaskServer
 
 1. Requirements
 
-  Make sure that [Java 8](http://www.oracle.com/technetwork/java/javase/), [Maven 3](http://maven.apache.org/) and [*AMIMini*](https://github.com/ami-lpsc/AMIMini/) are installed:
+  Make sure that [Java 8](http://www.oracle.com/technetwork/java/javase/), [Maven 3](http://maven.apache.org/) and [*AMIMini*](https://github.com/ami-team/AMIMini/) are installed:
 	```bash
 java -version
 mvn -version
