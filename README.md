@@ -72,6 +72,8 @@ Configuration file template (~/.ami/AMI.xml, /etc/ami/AMI.xml or java -Dami.conf
 	  <property name="router_user"><![CDATA[router_user]]></property>
 	  <property name="router_pass"><![CDATA[router_pass]]></property>
 
+	  <property name="exclusion_server_url"><![CDATA[exclusion_server_url]]></property>
+  
 	  <property name="server_name"><![CDATA[server_name]]></property>
 
 	  <!--
