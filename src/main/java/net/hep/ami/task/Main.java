@@ -264,18 +264,16 @@ public class Main implements AMIHandler
 	{
 		/*-----------------------------------------------------------------*/
 
-		String ips = config.get("ips");
+		String commaSeparatedIPs = config.get("ips");
 
-		if(ips == null)
+		if(commaSeparatedIPs == null)
 		{
 			return;
 		}
 
 		/*-----------------------------------------------------------------*/
 
-		String[] IPS = s_ipSplitPattern.split(ips);
-
-		for(String IP: IPS)
+		for(String IP: s_ipSplitPattern.split(commaSeparatedIPs))
 		{
 			if(ip.equals(IP))
 			{
