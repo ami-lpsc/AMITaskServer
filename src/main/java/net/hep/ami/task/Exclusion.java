@@ -49,7 +49,7 @@ public class Exclusion
 	public static boolean lock(String endpoint, String server, String commaSeparatedLocks) throws Exception
 	{
 		if(endpoint.isEmpty()
-		   &&
+		   ||
 		   commaSeparatedLocks.isEmpty()
 		 ) {
 			return true;
@@ -63,7 +63,7 @@ public class Exclusion
 	public static boolean unlock(String endpoint, String server, String commaSeparatedLocks) throws Exception
 	{
 		if(endpoint.isEmpty()
-		   &&
+		   ||
 		   commaSeparatedLocks.isEmpty()
 		 ) {
 			return true;
