@@ -105,7 +105,7 @@ public class Scheduler extends Thread
 			{
 				try
 				{
-					Exclusion.unlockAll(m_exclusionServerUrl, m_serverName);
+					removeAllTasks();
 				}
 				catch(Exception e)
 				{
@@ -114,7 +114,7 @@ public class Scheduler extends Thread
 
 				try
 				{
-					removeAllTasks();
+					Exclusion.unlockAll(m_exclusionServerUrl, m_serverName);
 				}
 				catch(Exception e)
 				{
