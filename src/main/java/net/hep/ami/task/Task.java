@@ -1,7 +1,6 @@
 package net.hep.ami.task;
 
 import java.io.*;
-import java.util.*;
 
 public class Task
 {
@@ -14,7 +13,7 @@ public class Task
 	private String m_id;
 	private String m_name;
 	private String m_command;
-	private Set<String> m_lockSet;
+	private String m_commaSeparatedLocks;
 
 	/*---------------------------------------------------------------------*/
 
@@ -22,7 +21,7 @@ public class Task
 
 	/*---------------------------------------------------------------------*/
 
-	public Task(String id, String name, String command, Set<String> lockSet) throws IOException
+	public Task(String id, String name, String command, String commaSeparatedLocks) throws IOException
 	{
 		/*-----------------------------------------------------------------*/
 		/* SET INSTANCE VARIABLES                                          */
@@ -31,7 +30,7 @@ public class Task
 		m_id = id;
 		m_name = name;
 		m_command = command;
-		m_lockSet = lockSet;
+		m_commaSeparatedLocks = commaSeparatedLocks;
 
 		/*-----------------------------------------------------------------*/
 		/* CREATE PROCESS                                                  */
@@ -44,6 +43,8 @@ public class Task
 		/*-----------------------------------------------------------------*/
 	}
 
+	/*---------------------------------------------------------------------*/
+	/* TASK                                                                */
 	/*---------------------------------------------------------------------*/
 
 	public String getId()
@@ -67,22 +68,13 @@ public class Task
 
 	/*---------------------------------------------------------------------*/
 
-	public boolean isLocked(Set<String> n_lockSet)
+	public String getCommaSeparatedLocks()
 	{
-		for(String a: n_lockSet)
-		{
-			for(String b: m_lockSet)
-			{
-				if(a.equalsIgnoreCase(b))
-				{
-					return true;
-				}
-			}
-		}
-
-		return false;
+		return m_commaSeparatedLocks;
 	}
 
+	/*---------------------------------------------------------------------*/
+	/* PROCESS                                                             */
 	/*---------------------------------------------------------------------*/
 
 	public void destroy()

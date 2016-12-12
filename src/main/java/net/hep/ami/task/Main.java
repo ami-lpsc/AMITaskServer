@@ -31,19 +31,21 @@ public class Main implements AMIHandler
 		/* CHECK TASK SERVER INFORMATION                                   */
 		/*-----------------------------------------------------------------*/
 
-		String jdbcUrl    = config.get("jdbc_url"   );
-		String routerUser = config.get("router_user");
-		String routerPass = config.get("router_pass");
+		String jdbcUrl            = config.get("jdbc_url"   );
+		String routerUser         = config.get("router_user");
+		String routerPass         = config.get("router_pass");
+		String exclusionServerUrl = config.get("exclusion_server_url");
+		String serverName         = config.get("server_name");
 
-		String serverName = config.get("server_name");
-
-		if(jdbcUrl    == null
+		if(jdbcUrl            == null
 		   ||
-		   routerUser == null
+		   routerUser         == null
 		   ||
-		   routerPass == null
+		   routerPass         == null
 		   ||
-		   serverName == null
+		   exclusionServerUrl == null
+		   ||
+		   serverName         == null
 		 ) {
 			throw new Exception("config error");
 		}
@@ -74,7 +76,7 @@ public class Main implements AMIHandler
 		/* RUN SCHEDULER                                                   */
 		/*-----------------------------------------------------------------*/
 
-		(m_scheduler = new Scheduler(jdbcUrl, routerUser, routerPass, serverName, maxTasks, compression)).start();
+		(m_scheduler = new Scheduler(jdbcUrl, routerUser, routerPass, exclusionServerUrl, serverName, maxTasks, compression)).start();
 
 		/*-----------------------------------------------------------------*/
 	}

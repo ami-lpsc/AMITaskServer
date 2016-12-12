@@ -4,18 +4,10 @@ import java.sql.*;
 import java.text.*;
 import java.util.*;
 import java.util.Map.*;
-import java.util.regex.*;
 import java.util.logging.*;
-import java.util.concurrent.*;
 
 public class Scheduler extends Thread
 {
-	/*---------------------------------------------------------------------*/
-
-	private static final Pattern s_lockSplitPattern = Pattern.compile(
-		"[^a-zA-Z0-9_\\-]"
-	);
-
 	/*---------------------------------------------------------------------*/
 
 	private static final Logger s_logger = Logger.getLogger(
@@ -24,11 +16,15 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
+	private String m_exclusionServerUrl;
+
 	private String m_serverName;
 
 	private Integer m_maxTasks;
 
 	private float m_compression;
+
+	/*---------------------------------------------------------------------*/
 
 	private Querier m_querier;
 
@@ -38,11 +34,11 @@ public class Scheduler extends Thread
 
 	private List<Integer> m_priorityTable = null;
 
-	private final Map<String, Task> m_runningTaskMap = new ConcurrentHashMap<>();
+	private final Map<String, Task> m_runningTaskMap = new HashMap<>();
 
 	/*---------------------------------------------------------------------*/
 
-	public Scheduler(String jdbcUrl, String routerUser, String routerPass, String serverName, int maxTasks, float compression) throws Exception
+	public Scheduler(String jdbcUrl, String routerUser, String routerPass, String exclusionServerUrl, String serverName, int maxTasks, float compression) throws Exception
 	{
 		/*-----------------------------------------------------------------*/
 		/* SUPER CONSTRUCTOR                                               */
@@ -53,6 +49,8 @@ public class Scheduler extends Thread
 		/*-----------------------------------------------------------------*/
 		/* SET INSTANCE VARIABLES                                          */
 		/*-----------------------------------------------------------------*/
+
+		m_exclusionServerUrl = exclusionServerUrl;
 
 		m_serverName = serverName;
 
@@ -77,6 +75,15 @@ public class Scheduler extends Thread
 		/*-----------------------------------------------------------------*/
 		/* INITIALIZE SCHEDULER                                            */
 		/*-----------------------------------------------------------------*/
+
+		try
+		{
+			Exclusion.unlockAll(m_exclusionServerUrl, m_serverName);
+		}
+		catch(Exception e)
+		{
+			s_logger.log(Level.SEVERE, e.getMessage(), e);
+		}
 
 		try
 		{
@@ -105,6 +112,15 @@ public class Scheduler extends Thread
 			@Override
 			public void run()
 			{
+				try
+				{
+					Exclusion.unlockAll(m_exclusionServerUrl, m_serverName);
+				}
+				catch(Exception e)
+				{
+					s_logger.log(Level.SEVERE, e.getMessage(), e);
+				}
+
 				try
 				{
 					removeAllTasks();
@@ -265,6 +281,8 @@ public class Scheduler extends Thread
 					statement.executeUpdate("UPDATE router_task SET running = 0, success = 0 WHERE id = '" + taskId + "'");
 				}
 
+				Exclusion.unlock(m_exclusionServerUrl, m_serverName, task.getCommaSeparatedLocks());
+
 				s_logger.log(Level.INFO, "Task `" + task.getName() + "` finished");
 			}
 
@@ -280,27 +298,9 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	private static class Tuple
-	{
-		public final String id;
-		public final String name;
-		public final String command;
-		public final Set<String> lockSet;
-
-		public Tuple(String _id, String _name, String _command, Set<String> _lockSet)
-		{
-			id = _id;
-			name = _name;
-			command = _command;
-			lockSet = _lockSet;
-		}
-	}
-
-	/*---------------------------------------------------------------------*/
-
 	private Random m_random = new Random();
 
-	private volatile boolean m_taskLock = false;
+	private volatile boolean m_schedulerLock = false;
 
 	private SimpleDateFormat m_simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
@@ -310,7 +310,7 @@ public class Scheduler extends Thread
 	{
 		/*-----------------------------------------------------------------*/
 
-		if(m_taskLock || m_numberOfPriorities == 0 || m_runningTaskMap.size() >= m_maxTasks)
+		if(m_schedulerLock || m_numberOfPriorities == 0 || m_runningTaskMap.size() >= m_maxTasks)
 		{
 			return;
 		}
@@ -324,55 +324,39 @@ public class Scheduler extends Thread
 
 		try
 		{
+			String id = "";
+			String name = "";
+			String command = "";
+			String commaSeparatedLocks = "";
+
 			/*-------------------------------------------------------------*/
 			/* SELECT PRIORITY                                             */
 			/*-------------------------------------------------------------*/
 
-			int i = 0;
-
-			String temp;
-
-			Set<String> lockSet;
+			boolean taskFound = false;
 
 			java.sql.ResultSet resultSet;
 
-			java.util.List<Tuple> tempTupleList = new ArrayList<>();
-
-			do
+			for(int i = 0; i < m_numberOfPriorities; i++)
 			{
 				/*---------------------------------------------------------*/
 
-				if(i >= m_numberOfPriorities)
-				{
-					return;
-				}
-
-				i++;
-
-				/*---------------------------------------------------------*/
-
-				sleep(1000L / (2 * m_numberOfPriorities));
-
-				/*---------------------------------------------------------*/
-
-				resultSet = statement.executeQuery("SELECT id, name, command, commaSeparatedLocks FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND running = 0 AND priority = '" + m_priorityTable.get(m_random.nextInt(m_priorityTable.size())) + "' AND (lastRunTime + step) < '" + date.getTime() + "'");
+				resultSet = statement.executeQuery("SELECT id, name, command, commaSeparatedLocks FROM router_task WHERE serverName = '" + m_serverName.replace("'", "''") + "' AND running = 0 AND priority = '" + m_priorityTable.get(m_random.nextInt(m_priorityTable.size())) + "' AND (lastRunTime + step) < '" + date.getTime() + "' ORDER BY RAND()");
 
 				try
 				{
 					while(resultSet.next())
 					{
-						lockSet = new HashSet<>();
+						id = resultSet.getString(1);
+						name = resultSet.getString(2);
+						command = resultSet.getString(3);
+						commaSeparatedLocks = resultSet.getString(4);
 
-						if((temp = resultSet.getString(4)) != null) Collections.addAll(lockSet, s_lockSplitPattern.split(temp));
-
-						if(isLocked(lockSet) == false)
+						if(Exclusion.lock(m_exclusionServerUrl, m_serverName, commaSeparatedLocks))
 						{
-							tempTupleList.add(new Tuple(
-								resultSet.getString(1),
-								resultSet.getString(2),
-								resultSet.getString(3),
-								lockSet
-							));
+							taskFound = true;
+
+							break;
 						}
 					}
 				}
@@ -382,30 +366,22 @@ public class Scheduler extends Thread
 				}
 
 				/*---------------------------------------------------------*/
-
-			} while(tempTupleList.isEmpty());
-
-			/*-------------------------------------------------------------*/
-			/* SELECT TASK                                                 */
-			/*-------------------------------------------------------------*/
-
-			Tuple tuple = tempTupleList.get(m_random.nextInt(tempTupleList.size()));
+			}
 
 			/*-------------------------------------------------------------*/
 			/* RUN TASK                                                    */
 			/*-------------------------------------------------------------*/
 
-			s_logger.log(Level.INFO, "Starting task `" + tuple.name + "`");
+			if(taskFound)
+			{
+				s_logger.log(Level.INFO, "Starting task `" + name + "`");
 
-			m_runningTaskMap.put(tuple.id, new Task(tuple.id, tuple.name, tuple.command, tuple.lockSet));
+				m_runningTaskMap.put(id, new Task(id, name, command, commaSeparatedLocks));
 
-			statement.executeUpdate("UPDATE router_task SET running = 1, success = 0, lastRunTime = '" + date.getTime() + "', lastRunDate = '" + m_simpleDateFormat.format(date) + "' WHERE id = '" + tuple.id + "'");
+				statement.executeUpdate("UPDATE router_task SET running = 1, success = 0, lastRunTime = '" + date.getTime() + "', lastRunDate = '" + m_simpleDateFormat.format(date) + "' WHERE id = '" + id + "'");
 
-			/*-------------------------------------------------------------*/
-			/* COMMIT                                                      */
-			/*-------------------------------------------------------------*/
-
-			connection.commit();
+				connection.commit();
+			}
 
 			/*-------------------------------------------------------------*/
 		}
@@ -415,21 +391,6 @@ public class Scheduler extends Thread
 		}
 
 		/*-----------------------------------------------------------------*/
-	}
-
-	/*---------------------------------------------------------------------*/
-
-	private boolean isLocked(Set<String> lockSet)
-	{
-		for(Task task: m_runningTaskMap.values())
-		{
-			if(task.isLocked(lockSet))
-			{
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	/*---------------------------------------------------------------------*/
@@ -490,7 +451,7 @@ public class Scheduler extends Thread
 
 	public void lock()
 	{
-		m_taskLock = true;
+		m_schedulerLock = true;
 
 		try
 		{
@@ -509,7 +470,7 @@ public class Scheduler extends Thread
 
 	public void unlock()
 	{
-		m_taskLock = false;
+		m_schedulerLock = false;
 
 		try
 		{
