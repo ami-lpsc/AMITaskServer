@@ -16,17 +16,17 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	private String m_exclusionServerUrl;
+	private final String m_exclusionServerUrl;
 
-	private String m_serverName;
+	private final String m_serverName;
 
-	private Integer m_maxTasks;
+	private final Integer m_maxTasks;
 
-	private float m_compression;
+	private final float m_compression;
 
 	/*---------------------------------------------------------------------*/
 
-	private Querier m_querier;
+	private final Querier m_querier;
 
 	/*---------------------------------------------------------------------*/
 
@@ -135,7 +135,7 @@ public class Scheduler extends Thread
 			{
 				/*---------------------------------------------------------*/
 
-				sleep(1000L);
+				Thread.sleep(1000L);
 
 				/*---------------------------------------------------------*/
 
@@ -319,7 +319,7 @@ public class Scheduler extends Thread
 
 			java.sql.ResultSet resultSet;
 
-			for(int i = 0; i < m_numberOfPriorities; i++)
+			for(int i = 0; i < 10; i++)
 			{
 				/*---------------------------------------------------------*/
 
@@ -346,6 +346,10 @@ public class Scheduler extends Thread
 				{
 					resultSet.close();
 				}
+
+				/*---------------------------------------------------------*/
+
+				Thread.sleep(100L);
 
 				/*---------------------------------------------------------*/
 			}
@@ -397,8 +401,6 @@ public class Scheduler extends Thread
 				{
 					map = new HashMap<>();
 
-					/*-----------------------------------------------------*/
-
 					map.put("id", resultSet.getString(1));
 					map.put("name", resultSet.getString(2));
 					map.put("command", resultSet.getString(3));
@@ -409,8 +411,6 @@ public class Scheduler extends Thread
 					map.put("priority", resultSet.getString(8));
 					map.put("step", resultSet.getString(9));
 					map.put("lastRunDate", resultSet.getString(10));
-
-					/*-----------------------------------------------------*/
 
 					result.add(map);
 				}
@@ -437,7 +437,7 @@ public class Scheduler extends Thread
 
 		try
 		{
-			Thread.sleep(500);
+			Thread.sleep(500L);
 		}
 		catch(InterruptedException e)
 		{
@@ -456,7 +456,7 @@ public class Scheduler extends Thread
 
 		try
 		{
-			Thread.sleep(500);
+			Thread.sleep(500L);
 		}
 		catch(InterruptedException e)
 		{

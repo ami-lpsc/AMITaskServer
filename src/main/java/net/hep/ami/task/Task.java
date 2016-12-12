@@ -10,14 +10,14 @@ public class Task
 
 	/*---------------------------------------------------------------------*/
 
-	private String m_id;
-	private String m_name;
-	private String m_command;
-	private String m_commaSeparatedLocks;
+	private final String m_id;
+	private final String m_name;
+	private final String m_command;
+	private final String m_commaSeparatedLocks;
 
 	/*---------------------------------------------------------------------*/
 
-	private Process m_process;
+	private final Process m_process;
 
 	/*---------------------------------------------------------------------*/
 

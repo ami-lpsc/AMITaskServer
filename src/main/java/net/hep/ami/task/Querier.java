@@ -6,9 +6,9 @@ public class Querier
 {
 	/*---------------------------------------------------------------------*/
 
-	private String m_url;
-	private String m_user;
-	private String m_pass;
+	private final String m_url;
+	private final String m_user;
+	private final String m_pass;
 
 	/*---------------------------------------------------------------------*/
 
