@@ -62,7 +62,7 @@ public class Scheduler extends Thread
 		/* CREATE AND CHECK QUERIER                                        */
 		/*-----------------------------------------------------------------*/
 
-		(m_querier = new Querier(jdbcUrl, routerUser, routerPass)).getConnection();
+		(m_querier = new Querier(jdbcUrl, routerUser, routerPass)).createConnection();
 
 		/*-----------------------------------------------------------------*/
 	}
@@ -94,15 +94,6 @@ public class Scheduler extends Thread
 			s_logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 
-		try
-		{
-			m_querier.close();
-		}
-		catch(Exception e)
-		{
-			s_logger.log(Level.SEVERE, e.getMessage(), e);
-		}
-
 		/*-----------------------------------------------------------------*/
 		/* FINALIZE SCHEDULER                                              */
 		/*-----------------------------------------------------------------*/
@@ -124,15 +115,6 @@ public class Scheduler extends Thread
 				try
 				{
 					removeAllTasks();
-				}
-				catch(Exception e)
-				{
-					s_logger.log(Level.SEVERE, e.getMessage(), e);
-				}
-
-				try
-				{
-					m_querier.close();
 				}
 				catch(Exception e)
 				{
@@ -181,7 +163,7 @@ public class Scheduler extends Thread
 
 	private void buildPriorityTable() throws Exception
 	{
-		Connection connection = m_querier.getConnection();
+		Connection connection = m_querier.createConnection();
 		Statement statement = connection.createStatement();
 
 		try
@@ -226,7 +208,7 @@ public class Scheduler extends Thread
 
 		/*-----------------------------------------------------------------*/
 
-		Connection connection = m_querier.getConnection();
+		Connection connection = m_querier.createConnection();
 		Statement statement = connection.createStatement();
 
 		try
@@ -263,7 +245,7 @@ public class Scheduler extends Thread
 
 		Task task;
 
-		Connection connection = m_querier.getConnection();
+		Connection connection = m_querier.createConnection();
 		Statement statement = connection.createStatement();
 
 		try
@@ -319,7 +301,7 @@ public class Scheduler extends Thread
 
 		java.util.Date date = new java.util.Date();
 
-		Connection connection = m_querier.getConnection();
+		Connection connection = m_querier.createConnection();
 		Statement statement = connection.createStatement();
 
 		try
@@ -398,7 +380,7 @@ public class Scheduler extends Thread
 
 	public List<Map<String, String>> getTasksStatus() throws Exception
 	{
-		Connection connection = m_querier.getConnection();
+		Connection connection = m_querier.createConnection();
 		Statement statement = connection.createStatement();
 
 		List<Map<String, String>> result = new ArrayList<>();

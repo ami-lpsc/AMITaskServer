@@ -32,14 +32,17 @@ public class Querier
 
 		String clazz;
 
-		/**/ if(url.startsWith("jdbc:mysql")) {
-			clazz = "org.gjt.mm.mysql.Driver";
-		}
-		else if(url.startsWith("jdbc:oracle")) {
+		/**/ if(url.startsWith("jdbc:oracle")) {
 			clazz = "oracle.jdbc.driver.OracleDriver";
 		}
 		else if(url.startsWith("jdbc:postgresql")) {
 			clazz = "org.postgresql.Driver";
+		}
+		else if(url.startsWith("jdbc:mysql")) {
+			clazz = "org.gjt.mm.mysql.Driver";
+		}
+		else if(url.startsWith("jdbc:mariadb")) {
+			clazz = "org.mariadb.jdbc.Driver";
 		}
 		else if(url.startsWith("jdbc:sqlite")) {
 			clazz = "org.sqlite.JDBC";
@@ -57,7 +60,7 @@ public class Querier
 
 	/*---------------------------------------------------------------------*/
 
-	public Connection getConnection() throws SQLException
+	public Connection createConnection() throws SQLException
 	{
 		if(m_connection == null || m_connection.isClosed() != false)
 		{
