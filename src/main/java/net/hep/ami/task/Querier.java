@@ -69,6 +69,8 @@ public class Querier
 				m_user,
 				m_pass
 			);
+
+			m_connection.setAutoCommit(false);
 		}
 
 		return m_connection;
