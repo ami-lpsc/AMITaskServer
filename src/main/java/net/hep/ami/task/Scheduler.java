@@ -315,9 +315,9 @@ public class Scheduler extends Thread
 			/* SELECT PRIORITY                                             */
 			/*-------------------------------------------------------------*/
 
-			boolean taskFound = false;
+			ResultSet resultSet;
 
-			java.sql.ResultSet resultSet;
+			boolean taskFound = false;
 
 			for(int i = 0; i < 10; i++)
 			{
