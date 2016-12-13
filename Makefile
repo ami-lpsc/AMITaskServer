@@ -1,4 +1,4 @@
-all: assembly
+all: package
 	echo "done"
 
 compile:
