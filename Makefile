@@ -7,8 +7,8 @@ compile:
 install:
 	mvn install -U
 
-assembly:
-	mvn assembly:assembly
+package:
+	mvn package
 
 clean:
 	mvn clean
