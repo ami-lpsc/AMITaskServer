@@ -10,7 +10,7 @@ before_install:
 
  mvn install:install-file \
 	-DgeneratePom=true \
-	-DgroupId=com.oracle.jdbc -DartifactId=ojdbc7 \
+	-DgroupId=net.hep.ami -DartifactId=AMIMini \
 	-Dpackaging=jar -Dfile=AMIMini-0.0.1-SNAPSHOT.jar -Dversion=0.0.1-SNAPSHOT
 
 script:
