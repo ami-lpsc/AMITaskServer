@@ -6,10 +6,32 @@
 	<artifactId>AMITaskServer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+	<packaging>jar</packaging>
+
 	<name>AMITaskServer</name>
+	<description></description>
 	<url>http://www.cern.ch/ami/</url>
 
-	<packaging>jar</packaging>
+	<licenses>
+		<license>
+			<name>CeCILL, Version 2.1</name>
+			<url>http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.txt</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Jerome Odier</name>
+			<email>jerome.odier@lpsc.in2p3.fr</email>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:https://github.com/ami-team/AMITaskServer.git</connection>
+		<developerConnection>scm:git:git@github.com:ami-team/AMITaskServer.git</developerConnection>
+		<url>https://github.com/ami-team/AMITaskServer/</url>
+		<tag>HEAD</tag>
+	</scm>
 
 	<properties>
 		<mysql.version>6.0.5</mysql.version>
@@ -25,7 +47,7 @@
 		<dependency>
 			<groupId>net.hep.ami</groupId>
 			<artifactId>AMIMini</artifactId>
-			<version>${project.version}</version>
+			<version>LATEST</version>
 		</dependency>
 
 		<!--***************************************************************-->
