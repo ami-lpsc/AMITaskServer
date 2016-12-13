@@ -20,7 +20,7 @@ mvn -version
 
 2. Compiling sources
 	```bash
-mvn assembly:assembly
+mvn package
 ```
 
 Generated standalone bundle: *target/AMITaskServer-X.X.X-bundle.zip*
@@ -106,8 +106,8 @@ Install as Linux service
 	service AMITaskServer unlock
 	service AMITaskServer status
 
-[Build Status]:https://travis-ci.org/ami-lpsc/AMITaskServer/
-[Build Status img]:https://api.travis-ci.org/ami-lpsc/AMITaskServer.svg?branch=master
+[Build Status]:https://travis-ci.org/ami-team/AMITaskServer/
+[Build Status img]:https://api.travis-ci.org/ami-team/AMITaskServer.svg?branch=master
 
 [Dependency Status]:https://www.versioneye.com/user/projects/584ffae142c4d1005433cb65/
 [Dependency Status img]:https://www.versioneye.com/user/projects/584ffae142c4d1005433cb65/badge.svg?style=flat
