@@ -4,14 +4,16 @@ jdk:
  - oraclejdk8
 
 script:
- rm -fr AMIMini
+ #rm -fr AMIMini
 
- git clone https://github.com/ami-lpsc/AMIMini.git
+ #git clone https://github.com/ami-lpsc/AMIMini.git
 
- cd AMIMini
- mvn install -U
- cd ..
+ #cd AMIMini
+ #mvn install -U
+ #cd ..
 
- rm -fr AMIMini
+ #rm -fr AMIMini
 
- mvn package
+ #mvn package
+
+ echo "Yes !"
