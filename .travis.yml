@@ -8,10 +8,7 @@ sudo: required
 before_install:
  wget http://ami.web.cern.ch/ami/mini/AMIMini-0.0.1-SNAPSHOT.jar
 
- mvn install:install-file \
-	-DgeneratePom=true \
-	-DgroupId=net.hep.ami -DartifactId=AMIMini \
-	-Dpackaging=jar -Dfile=AMIMini-0.0.1-SNAPSHOT.jar -Dversion=0.0.1-SNAPSHOT
+ mvn install:install-file -DgeneratePom=true -DgroupId=net.hep.ami -DartifactId=AMIMini -Dpackaging=jar -Dfile=AMIMini-0.0.1-SNAPSHOT.jar -Dversion=0.0.1-SNAPSHOT
 
 script:
  mvn clean package
