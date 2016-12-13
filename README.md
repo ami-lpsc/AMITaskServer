@@ -1,3 +1,7 @@
+[![][Build Status img]][Build Status]
+[![][Dependency Status img]][Dependency Status]
+[![][license img]][license]
+
 AMITaskServer
 =============
 
@@ -101,3 +105,12 @@ Install as Linux service
 	service AMITaskServer lock
 	service AMITaskServer unlock
 	service AMITaskServer status
+
+[Build Status]:https://travis-ci.org/ami-lpsc/AMIExclusionServer/
+[Build Status img]:https://api.travis-ci.org/ami-lpsc/AMIExclusionServer.svg?branch=master
+
+[Dependency Status]:https://www.versioneye.com/user/projects/584f35a661ff4a003d3c3964/
+[Dependency Status img]:https://www.versioneye.com/user/projects/584f35a661ff4a003d3c3964/badge.svg?style=flat
+
+[license]:http://www.cecill.info/
+[license img]:https://img.shields.io/badge/license-CeCILL-blue.svg
