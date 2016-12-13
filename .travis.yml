@@ -3,17 +3,18 @@ language: java
 jdk:
  - oraclejdk8
 
+sudo: required
+
+before_script:
+ rm -fr AMIMini
+
+ git clone https://github.com/ami-team/AMIMini.git
+
+ cd AMIMini
+ mvn install -U
+ cd ..
+
+ rm -fr AMIMini
+
 script:
- #rm -fr AMIMini
-
- #git clone https://github.com/ami-lpsc/AMIMini.git
-
- #cd AMIMini
- #mvn install -U
- #cd ..
-
- #rm -fr AMIMini
-
- #mvn package
-
- echo "Hello world"
+ mvn clean package
