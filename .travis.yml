@@ -16,4 +16,4 @@ script:
 
  #mvn package
 
- echo "Yes !"
+ echo "Hello world"
