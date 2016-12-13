@@ -6,9 +6,7 @@ jdk:
 sudo: required
 
 before_install:
- wget http://ami.web.cern.ch/ami/mini/AMIMini-0.0.1-SNAPSHOT.jar
-
- mvn install:install-file -DgeneratePom=true -DgroupId=net.hep.ami -DartifactId=AMIMini -Dpackaging=jar -Dfile=AMIMini-0.0.1-SNAPSHOT.jar -Dversion=0.0.1-SNAPSHOT
+ ( rm -fr AMIMini && git clone https://github.com/ami-team/AMIMini.git && cd AMIMini && mvn install -U && cd .. && rm -fr AMIMini )
 
 script:
  mvn clean package
