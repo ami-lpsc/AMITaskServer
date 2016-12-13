@@ -5,7 +5,7 @@ jdk:
 
 sudo: required
 
-before_script:
+before_install:
  rm -fr AMIMini
 
  git clone https://github.com/ami-team/AMIMini.git
