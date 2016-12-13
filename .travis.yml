@@ -6,15 +6,12 @@ jdk:
 sudo: required
 
 before_install:
- rm -fr AMIMini
+ wget http://ami.web.cern.ch/ami/mini/AMIMini-0.0.1-SNAPSHOT.jar
 
- git clone https://github.com/ami-team/AMIMini.git ami-team/AMITaskServer/AMIMini
-
- cd ami-team/AMITaskServer/AMIMini
- mvn install -U
- cd ../../..
-
- rm -fr ami-team/AMITaskServer/AMIMini
+ mvn install:install-file \
+	-DgeneratePom=true \
+	-DgroupId=com.oracle.jdbc -DartifactId=ojdbc7 \
+	-Dpackaging=jar -Dfile=AMIMini-0.0.1-SNAPSHOT.jar -Dversion=0.0.1-SNAPSHOT
 
 script:
  mvn clean package
