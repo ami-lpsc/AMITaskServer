@@ -8,13 +8,13 @@ sudo: required
 before_install:
  rm -fr AMIMini
 
- git clone https://github.com/ami-team/AMIMini.git
+ git clone https://github.com/ami-team/AMIMini.git ami-team/AMITaskServer/AMIMini
 
- cd AMIMini
+ cd ami-team/AMITaskServer/AMIMini
  mvn install -U
- cd ..
+ cd ../../..
 
- rm -fr AMIMini
+ rm -fr ami-team/AMITaskServer/AMIMini
 
 script:
  mvn clean package
