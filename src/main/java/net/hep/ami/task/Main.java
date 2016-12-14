@@ -84,7 +84,7 @@ public class Main implements AMIHandler
 	/*---------------------------------------------------------------------*/
 
 	@Override
-	public StringBuilder exec(AMIServer server, Map<String, String> config, String command, Map<String, String> arguments, String ip) throws Exception
+	public StringBuilder exec(AMIServer server, Map<String, String> config, String command, Map<String, String> arguments, String ip, String clientDN, String issuerDN) throws Exception
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -183,7 +183,7 @@ public class Main implements AMIHandler
 	/*---------------------------------------------------------------------*/
 
 	@Override
-	public StringBuilder help(Map<String, String> config, String command, String ip) throws Exception
+	public StringBuilder help(Map<String, String> config, String command, String ip, String clientDN, String issuerDN) throws Exception
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -253,7 +253,7 @@ public class Main implements AMIHandler
 	/*---------------------------------------------------------------------*/
 
 	@Override
-	public StringBuilder usage(Map<String, String> config, String command, String ip) throws Exception
+	public StringBuilder usage(Map<String, String> config, String command, String ip, String clientDN, String issuerDN) throws Exception
 	{
 		return null;
 	}
