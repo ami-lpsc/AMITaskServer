@@ -111,23 +111,27 @@ Configuration file template (~/.ami/AMI.xml, /etc/ami/AMI.xml or java -Dami.conf
 Using AMITaskServer
 ===================
 
-	./AMITaskServer start
-	./AMITaskServer stop
-	./AMITaskServer lock
-	./AMITaskServer unlock
-	./AMITaskServer status
-	./AMITaskServer --help
+```bash
+./AMITaskServer start
+./AMITaskServer stop
+./AMITaskServer lock
+./AMITaskServer unlock
+./AMITaskServer status
+./AMITaskServer --help
+```
 
 Install as Linux service
 ========================
 
-	./installAMITaskServer.sh
+```bash
+./installAMITaskServer.sh
 
-	service AMITaskServer start
-	service AMITaskServer stop
-	service AMITaskServer lock
-	service AMITaskServer unlock
-	service AMITaskServer status
+service AMITaskServer start
+service AMITaskServer stop
+service AMITaskServer lock
+service AMITaskServer unlock
+service AMITaskServer status
+```
 
 [Build Status]:https://travis-ci.org/ami-team/AMITaskServer/
 [Build Status img]:https://api.travis-ci.org/ami-team/AMITaskServer.svg?branch=master
