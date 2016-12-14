@@ -26,19 +26,16 @@
 		</developer>
 	</developers>
 
-	<scm>
-		<connection>scm:git:https://github.com/ami-team/AMITaskServer.git</connection>
-		<developerConnection>scm:git:git@github.com:ami-team/AMITaskServer.git</developerConnection>
-		<url>https://github.com/ami-team/AMITaskServer/</url>
-		<tag>HEAD</tag>
-	</scm>
-
 	<properties>
+		<amimini.version>0.0.1-SNAPSHOT</amimini.version>
+
 		<mysql.version>6.0.5</mysql.version>
 		<postgresql.version>9.4.1212</postgresql.version>
 		<sqlite.version>3.15.1</sqlite.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<dependencies>
@@ -47,7 +44,7 @@
 		<dependency>
 			<groupId>net.hep.ami</groupId>
 			<artifactId>AMIMini</artifactId>
-			<version>LATEST</version>
+			<version>${amimini.version}</version>
 		</dependency>
 
 		<!--***************************************************************-->
@@ -96,28 +93,6 @@
 		</pluginManagement>
 
 		<plugins>
-			<!--***********************************************************-->
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.0.2</version>
-			</plugin>
-
-			<!--***********************************************************-->
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.0</version>
-
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-
-			</plugin>
-
 			<!--***********************************************************-->
 
 			<plugin>
