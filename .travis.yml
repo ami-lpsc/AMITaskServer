@@ -5,8 +5,5 @@ jdk:
 
 sudo: required
 
-before_install:
- rm -fr AMIMini ; ( git clone https://github.com/ami-team/AMIMini.git && cd AMIMini && mvn install -U ) ; rm -fr AMIMini
-
 script:
  mvn clean package
