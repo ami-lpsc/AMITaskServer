@@ -39,7 +39,7 @@ public class Querier
 			clazz = "org.postgresql.Driver";
 		}
 		else if(url.startsWith("jdbc:mysql")) {
-			clazz = "com.mysql.jdbc.Driver";
+			clazz = "com.mysql.cj.jdbc.Driver";
 		}
 		else if(url.startsWith("jdbc:mariadb")) {
 			clazz = "org.mariadb.jdbc.Driver";
