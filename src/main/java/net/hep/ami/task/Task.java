@@ -83,11 +83,11 @@ public class Task
 		{
 			try
 			{
-				java.lang.reflect.Field field = m_process.getClass().getDeclaredField("pid");
+				java.lang.reflect.Field field = Process.class.getDeclaredField("pid");
 
 				field.setAccessible(true);
 
-				System.out.println("kill " + field.toString());
+				System.out.println("kill " + field.getInt(m_process));
 
 				//Runtime.getRuntime().exec("kill");
 			}
