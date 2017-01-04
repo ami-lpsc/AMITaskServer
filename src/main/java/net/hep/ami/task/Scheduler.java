@@ -77,6 +77,7 @@ public class Scheduler extends Thread
 
 	public void gracefulStop()
 	{
+		m_schedulerLock = true;
 		m_schedulerAlive = false;
 	}
 
