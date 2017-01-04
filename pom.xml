@@ -27,7 +27,7 @@
 	</developers>
 
 	<properties>
-		<amimini.version>0.0.1-SNAPSHOT</amimini.version>
+		<amimini.version>0.0.2-SNAPSHOT</amimini.version>
 
 		<mysql.version>6.0.5</mysql.version>
 		<postgresql.version>9.4.1212</postgresql.version>
