@@ -89,7 +89,11 @@ public class Task
 
 			/*-------------------------------------------------------------*/
 
-			Runtime.getRuntime().exec("kill " + field.getInt(m_process));
+			int pid = field.getInt(m_process);
+
+			System.out.println("kill " + pid);
+
+			Runtime.getRuntime().exec("kill " + pid);
 
 			/*-------------------------------------------------------------*/
 		}
