@@ -36,9 +36,11 @@ public class Task
 		/* CREATE PROCESS                                                  */
 		/*-----------------------------------------------------------------*/
 
-		m_process = Runtime.getRuntime().exec(IS_WINDOWS ? new String[] {("cmd.exe"), "/C", command}
-		                                                 : new String[] {"/bin/bash", "-c", command}
+		ProcessBuilder processBuilder = new ProcessBuilder(IS_WINDOWS ? new String[] {("cmd.exe"), "/C", command}
+		                                                              : new String[] {"/bin/bash", "-c", command}
 		);
+
+		m_process = processBuilder.start();
 
 		/*-----------------------------------------------------------------*/
 	}
@@ -88,7 +90,9 @@ public class Task
 			field.setAccessible(true);
 
 			/*-------------------------------------------------------------*/
-System.out.println("pid: " + field.getInt(m_process));
+
+			System.out.println("pid: " + field.getInt(m_process));
+
 			Runtime.getRuntime().exec("kill -9 -" + field.getInt(m_process));
 
 			/*-------------------------------------------------------------*/
