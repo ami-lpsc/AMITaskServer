@@ -88,7 +88,7 @@ public class Task
 			field.setAccessible(true);
 
 			/*-------------------------------------------------------------*/
-
+System.out.println("pid: " + field.getInt(m_process));
 			Runtime.getRuntime().exec("kill -9 -" + field.getInt(m_process));
 
 			/*-------------------------------------------------------------*/
