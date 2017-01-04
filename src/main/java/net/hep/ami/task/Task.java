@@ -79,7 +79,27 @@ public class Task
 
 	public void destroy()
 	{
-		m_process.destroy();
+		if(m_process.getClass().getName().equals("java.lang.UNIXProcess"))
+		{
+			try
+			{
+				java.lang.reflect.Field field = m_process.getClass().getDeclaredField("pid");
+
+				field.setAccessible(true);
+
+				System.out.println("kill " + field.toString());
+
+				//Runtime.getRuntime().exec("kill");
+			}
+			catch(Exception e)
+			{
+				/* IGNORE */
+			}
+		}
+		else
+		{
+			m_process.destroy();
+		}
 	}
 
 	/*---------------------------------------------------------------------*/
