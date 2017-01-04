@@ -93,7 +93,7 @@ public class Task
 
 			Runtime.getRuntime().exec("kill -9 " + pid).waitFor(); /* PARENT */
 
-			Runtime.getRuntime().exec("pkill -KILL -P " + pid).waitFor(); /* CHILD */
+			Runtime.getRuntime().exec("pkill -TERM -P " + pid).waitFor(); /* CHILD */
 
 			/*-------------------------------------------------------------*/
 
