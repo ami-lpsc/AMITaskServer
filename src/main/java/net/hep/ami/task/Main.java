@@ -167,6 +167,8 @@ public class Main implements AMIHandler
 		{
 			checkIP(config, ip);
 
+			m_scheduler.terminate();
+
 			server.gracefulStop();
 		}
 

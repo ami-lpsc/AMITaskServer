@@ -69,14 +69,28 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	@Override
-	public void run()
+	public void terminate()
 	{
 		/*-----------------------------------------------------------------*/
-		/* INITIALIZE SCHEDULER                                            */
+
+		s_logger.log(Level.INFO, "Bye.");
+
 		/*-----------------------------------------------------------------*/
 
-		s_logger.log(Level.INFO, "Hello.");
+		m_schedulerLock = false;
+
+		/*-----------------------------------------------------------------*/
+
+		try
+		{
+			Thread.sleep(2000L);
+		}
+		catch(Exception e)
+		{
+			/* IGNORE */
+		}
+
+		/*-----------------------------------------------------------------*/
 
 		try
 		{
@@ -86,6 +100,8 @@ public class Scheduler extends Thread
 		{
 			s_logger.log(Level.SEVERE, e.getMessage(), e);
 		}
+
+		/*-----------------------------------------------------------------*/
 
 		try
 		{
@@ -97,35 +113,40 @@ public class Scheduler extends Thread
 		}
 
 		/*-----------------------------------------------------------------*/
-		/* FINALIZE SCHEDULER                                              */
+	}
+
+	/*---------------------------------------------------------------------*/
+
+	@Override
+	public void run()
+	{
+		/*-----------------------------------------------------------------*/
+		/* INITIALIZE SCHEDULER                                            */
 		/*-----------------------------------------------------------------*/
 
-		Runtime.getRuntime().addShutdownHook(new Thread(Scheduler.class.getName()) {
+		s_logger.log(Level.INFO, "Hello.");
 
-			@Override
-			public void run()
-			{
-				s_logger.log(Level.INFO, "Bye.");
+		/*-----------------------------------------------------------------*/
 
-				try
-				{
-					removeAllTasks();
-				}
-				catch(Exception e)
-				{
-					s_logger.log(Level.SEVERE, e.getMessage(), e);
-				}
+		try
+		{
+			removeAllTasks();
+		}
+		catch(Exception e)
+		{
+			s_logger.log(Level.SEVERE, e.getMessage(), e);
+		}
 
-				try
-				{
-					Exclusion.unlockAll(m_exclusionServerUrl, m_serverName);
-				}
-				catch(Exception e)
-				{
-					s_logger.log(Level.SEVERE, e.getMessage(), e);
-				}
-			}
-		});
+		/*-----------------------------------------------------------------*/
+
+		try
+		{
+			Exclusion.unlockAll(m_exclusionServerUrl, m_serverName);
+		}
+		catch(Exception e)
+		{
+			s_logger.log(Level.SEVERE, e.getMessage(), e);
+		}
 
 		/*-----------------------------------------------------------------*/
 		/* SCHEDULER LOOP                                                  */
