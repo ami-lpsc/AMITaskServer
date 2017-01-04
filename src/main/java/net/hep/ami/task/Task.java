@@ -79,8 +79,6 @@ public class Task
 
 	public void destroy()
 	{
-		System.out.println("kill...");
-
 		try
 		{
 			/*-------------------------------------------------------------*/
@@ -91,9 +89,7 @@ public class Task
 
 			/*-------------------------------------------------------------*/
 
-			System.out.println("kill " + field.getInt(m_process));
-
-			//Runtime.getRuntime().exec("kill");
+			Runtime.getRuntime().exec("kill " + field.getInt(m_process));
 
 			/*-------------------------------------------------------------*/
 		}
