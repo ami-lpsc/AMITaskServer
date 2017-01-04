@@ -93,7 +93,7 @@ public class Task
 
 			System.out.println("pid: " + field.getInt(m_process));
 
-			Runtime.getRuntime().exec("kill -9 -" + field.getInt(m_process));
+			Runtime.getRuntime().exec("pkill -TERM -P " + field.getInt(m_process));
 
 			/*-------------------------------------------------------------*/
 		}
