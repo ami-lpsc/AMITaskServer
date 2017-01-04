@@ -39,7 +39,7 @@ then
 
     cd $AMI_HOME
 
-    $JAVA_HOME/bin/java -Dami.conffile=$AMI_HOME/AMI.xml -classpath $AMICLASSPATH net.hep.ami.task.Main $PORT &> $AMI_HOME/log/AMITaskServer.out &
+    $JAVA_HOME/bin/java -Dfile.encoding=UTF-8 -Djava.security.egd=file:/dev/../dev/urandom -Dami.conffile=$AMI_HOME/AMI.xml -classpath $AMICLASSPATH net.hep.ami.task.Main $PORT &> $AMI_HOME/log/AMITaskServer.out &
 
   )
   ###########################################################################
