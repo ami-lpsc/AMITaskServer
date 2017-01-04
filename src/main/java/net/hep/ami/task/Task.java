@@ -91,7 +91,7 @@ public class Task
 
 			int pid = field.getInt(m_process);
 
-			Runtime.getRuntime().exec("pkill -9 -P " + pid).waitFor(); /* CHILD */
+			Runtime.getRuntime().exec("pkill -TERM -P " + pid).waitFor(); /* CHILD */
 
 			Runtime.getRuntime().exec("kill -9 " + pid).waitFor(); /* PARENT */
 
