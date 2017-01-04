@@ -76,6 +76,8 @@ public class Scheduler extends Thread
 		/* INITIALIZE SCHEDULER                                            */
 		/*-----------------------------------------------------------------*/
 
+		s_logger.log(Level.INFO, "Hello.");
+
 		try
 		{
 			removeAllTasks();
@@ -103,6 +105,8 @@ public class Scheduler extends Thread
 			@Override
 			public void run()
 			{
+				s_logger.log(Level.INFO, "Bye.");
+
 				try
 				{
 					removeAllTasks();
