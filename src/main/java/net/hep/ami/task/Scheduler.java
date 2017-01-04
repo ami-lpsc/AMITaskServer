@@ -16,6 +16,12 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
+	private volatile boolean m_schedulerAlive = true;
+
+	private volatile boolean m_schedulerLock = false;
+
+	/*---------------------------------------------------------------------*/
+
 	private final String m_exclusionServerUrl;
 
 	private final String m_serverName;
@@ -69,50 +75,9 @@ public class Scheduler extends Thread
 
 	/*---------------------------------------------------------------------*/
 
-	public void terminate()
+	public void gracefulStop()
 	{
-		/*-----------------------------------------------------------------*/
-
-		s_logger.log(Level.INFO, "Bye.");
-
-		/*-----------------------------------------------------------------*/
-
-		m_schedulerLock = false;
-
-		/*-----------------------------------------------------------------*/
-
-		try
-		{
-			Thread.sleep(2000L);
-		}
-		catch(Exception e)
-		{
-			/* IGNORE */
-		}
-
-		/*-----------------------------------------------------------------*/
-
-		try
-		{
-			removeAllTasks();
-		}
-		catch(Exception e)
-		{
-			s_logger.log(Level.SEVERE, e.getMessage(), e);
-		}
-
-		/*-----------------------------------------------------------------*/
-
-		try
-		{
-			Exclusion.unlockAll(m_exclusionServerUrl, m_serverName);
-		}
-		catch(Exception e)
-		{
-			s_logger.log(Level.SEVERE, e.getMessage(), e);
-		}
-
-		/*-----------------------------------------------------------------*/
+		m_schedulerAlive = false;
 	}
 
 	/*---------------------------------------------------------------------*/
@@ -122,10 +87,6 @@ public class Scheduler extends Thread
 	{
 		/*-----------------------------------------------------------------*/
 		/* INITIALIZE SCHEDULER                                            */
-		/*-----------------------------------------------------------------*/
-
-		s_logger.log(Level.INFO, "Hello.");
-
 		/*-----------------------------------------------------------------*/
 
 		try
@@ -154,7 +115,7 @@ public class Scheduler extends Thread
 
 		long i = 0;
 
-		for(;;)
+		while(m_schedulerAlive)
 		{
 			try
 			{
@@ -179,6 +140,30 @@ public class Scheduler extends Thread
 			{
 				s_logger.log(Level.SEVERE, e.getMessage(), e);
 			}
+		}
+
+		/*-----------------------------------------------------------------*/
+		/* FINALIZE SCHEDULER                                              */
+		/*-----------------------------------------------------------------*/
+
+		try
+		{
+			removeAllTasks();
+		}
+		catch(Exception e)
+		{
+			s_logger.log(Level.SEVERE, e.getMessage(), e);
+		}
+
+		/*-----------------------------------------------------------------*/
+
+		try
+		{
+			Exclusion.unlockAll(m_exclusionServerUrl, m_serverName);
+		}
+		catch(Exception e)
+		{
+			s_logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 
 		/*-----------------------------------------------------------------*/
@@ -306,8 +291,6 @@ public class Scheduler extends Thread
 	/*---------------------------------------------------------------------*/
 
 	private Random m_random = new Random();
-
-	private volatile boolean m_schedulerLock = false;
 
 	private SimpleDateFormat m_simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 

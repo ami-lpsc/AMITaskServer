@@ -36,17 +36,10 @@ public class Task
 		/* CREATE PROCESS                                                  */
 		/*-----------------------------------------------------------------*/
 
-		ProcessBuilder processBuilder = new ProcessBuilder(IS_WINDOWS ? new String[] {("cmd.exe"), "/C", command}
-		                                                              : new String[] {"/bin/bash", "-c", command}
-		);
-
-		m_process = processBuilder.start();
-
-/*
 		m_process = Runtime.getRuntime().exec(IS_WINDOWS ? new String[] {("cmd.exe"), "/C", command}
 		                                                 : new String[] {"/bin/bash", "-c", command}
 		);
-*/
+
 		/*-----------------------------------------------------------------*/
 	}
 

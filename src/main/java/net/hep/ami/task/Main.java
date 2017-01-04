@@ -167,7 +167,7 @@ public class Main implements AMIHandler
 		{
 			checkIP(config, ip);
 
-			m_scheduler.terminate();
+			m_scheduler.gracefulStop();
 
 			server.gracefulStop();
 		}
@@ -250,6 +250,14 @@ public class Main implements AMIHandler
 		}
 
 		return result;
+	}
+
+	/*---------------------------------------------------------------------*/
+
+	@Override
+	public void join() throws InterruptedException
+	{
+		m_scheduler.join();
 	}
 
 	/*---------------------------------------------------------------------*/
