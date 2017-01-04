@@ -85,7 +85,7 @@ public class Task
 		{
 			/*-------------------------------------------------------------*/
 
-			java.lang.reflect.Field field = Process.class.getDeclaredField("pid");
+			java.lang.reflect.Field field = m_process.getClass().getDeclaredField("pid");
 
 			field.setAccessible(true);
 
