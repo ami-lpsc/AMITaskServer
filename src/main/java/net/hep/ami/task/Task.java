@@ -77,7 +77,7 @@ public class Task
 	/* PROCESS                                                             */
 	/*---------------------------------------------------------------------*/
 
-	public void destroy()
+	public boolean destroy()
 	{
 		try
 		{
@@ -96,10 +96,14 @@ public class Task
 			Runtime.getRuntime().exec("kill -9 " + pid); /* PARENT */
 
 			/*-------------------------------------------------------------*/
+
+			return true;
 		}
 		catch(Exception e)
 		{
 			m_process.destroy();
+
+			return false;
 		}
 	}
 

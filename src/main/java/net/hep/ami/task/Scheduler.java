@@ -212,9 +212,7 @@ public class Scheduler extends Thread
 
 		for(Task task: m_runningTaskMap.values())
 		{
-			s_logger.log(Level.WARNING, "Killing task `" + task.getName() + "`");
-
-			task.destroy();
+			s_logger.log(Level.WARNING, "Killing task `" + task.getName() + "`, " + (task.destroy() ? "hard" : "soft") + "method");
 		}
 
 		/*-----------------------------------------------------------------*/
