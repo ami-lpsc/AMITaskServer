@@ -6,7 +6,7 @@ public class Task
 {
 	/*---------------------------------------------------------------------*/
 
-	private static final boolean IS_WINDOWS = System.getProperty("os.name", "").toLowerCase().startsWith("windows");
+	private static final boolean IS_WINDOWS = System.getProperty("os.name").toLowerCase().indexOf("win") >= 0;
 
 	/*---------------------------------------------------------------------*/
 

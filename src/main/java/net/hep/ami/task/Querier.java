@@ -18,44 +18,9 @@ public class Querier
 
 	public Querier(String url, String user, String pass) throws ClassNotFoundException, SQLException
 	{
-		/*-----------------------------------------------------------------*/
-		/* SET INSTANCE VARIABLES                                          */
-		/*-----------------------------------------------------------------*/
-
 		m_url = url;
 		m_user = user;
 		m_pass = pass;
-
-		/*-----------------------------------------------------------------*/
-		/* LOAD JDBC DRIVER                                                */
-		/*-----------------------------------------------------------------*/
-
-		String clazz;
-
-		/**/ if(url.startsWith("jdbc:oracle")) {
-			clazz = "oracle.jdbc.driver.OracleDriver";
-		}
-		else if(url.startsWith("jdbc:postgresql")) {
-			clazz = "org.postgresql.Driver";
-		}
-		else if(url.startsWith("jdbc:mysql")) {
-			clazz = "com.mysql.cj.jdbc.Driver";
-		}
-		else if(url.startsWith("jdbc:mariadb")) {
-			clazz = "org.mariadb.jdbc.Driver";
-		}
-		else if(url.startsWith("jdbc:sqlite")) {
-			clazz = "org.sqlite.JDBC";
-		}
-		else {
-			throw new ClassNotFoundException("unknown JDBC driver");
-		}
-
-		/*-----------------------------------------------------------------*/
-
-		Class.forName(clazz);
-
-		/*-----------------------------------------------------------------*/
 	}
 
 	/*---------------------------------------------------------------------*/
