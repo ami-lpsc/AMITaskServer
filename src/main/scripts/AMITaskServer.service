@@ -1,0 +1,17 @@
+# /etc/systemd/system/AMITaskServer.service
+
+[Unit]
+Description=AMI Task Server
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+ExecStart=/opt/AMITaskServer/latest/startAMITaskServer.sh
+ExecStop=/opt/AMITaskServer/latest/stopAMITaskServer.sh
+
+User=tomcat
+Group=tomcat
+
+[Install]
+WantedBy=multi-user.target
