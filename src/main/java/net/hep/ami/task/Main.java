@@ -20,10 +20,12 @@ public class Main implements AMIHandler
 
 	private Scheduler m_scheduler;
 
+	private AMIServer m_amiServer;
+
 	/*---------------------------------------------------------------------*/
 
 	@Override
-	public void init(AMIServer server, Map<String, String> config) throws Exception
+	public void init(Map<String, String> config) throws Exception
 	{
 		String s;
 
@@ -84,11 +86,11 @@ public class Main implements AMIHandler
 	/*---------------------------------------------------------------------*/
 
 	@Override
-	public StringBuilder exec(AMIServer server, Map<String, String> config, String command, Map<String, String> arguments, String ip, String clientDN, String issuerDN) throws Exception
+	public StringBuilder exec(Map<String, String> config, String command, Map<String, String> arguments, String ip, String clientDN, String issuerDN) throws Exception
 	{
 		StringBuilder result = new StringBuilder();
 
-		result.append("<info><![CDATA[Done with success]]></info>");
+		result.append("<info><![CDATA[done with success]]></info>");
 
 		/*-----------------------------------------------------------------*/
 		/* GetSessionInfo                                                  */
@@ -169,14 +171,14 @@ public class Main implements AMIHandler
 
 			m_scheduler.gracefulStop();
 
-			server.gracefulStop();
+			m_amiServer.gracefulStop();
 		}
 
 		/*-----------------------------------------------------------------*/
 
 		else
 		{
-			throw new Exception("Command not found");
+			throw new Exception("command `" + command + "` not found");
 		}
 
 		return result;
@@ -293,7 +295,7 @@ public class Main implements AMIHandler
 
 		/*-----------------------------------------------------------------*/
 
-		throw new Exception("User not allowed");
+		throw new Exception("user not allowed");
 
 		/*-----------------------------------------------------------------*/
 	}
@@ -304,10 +306,12 @@ public class Main implements AMIHandler
 	{
 		try
 		{
-			AMIServer server = new AMIServer(args.length == 1 ? Integer.parseInt(args[0]) : 1357, new Main());
+			Main myHandler = new Main();
 
-			server.start();
-			server.join();
+			myHandler.m_amiServer = new AMIServer(args.length == 1 ? Integer.parseInt(args[0]) : 1357, myHandler);
+
+			myHandler.m_amiServer.start();
+			myHandler.m_amiServer.join();
 		}
 		catch(Exception e)
 		{
