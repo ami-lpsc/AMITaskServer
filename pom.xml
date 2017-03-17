@@ -27,7 +27,7 @@
 	</developers>
 
 	<properties>
-		<amimini.version>0.0.2-SNAPSHOT</amimini.version>
+		<amimini.version>LATEST</amimini.version>
 
 		<mysql.version>6.0.5</mysql.version>
 		<postgresql.version>9.4.1212</postgresql.version>
@@ -43,7 +43,16 @@
 
 		<dependency>
 			<groupId>net.hep.ami</groupId>
-			<artifactId>AMIMini</artifactId>
+			<artifactId>AMIMiniServlet</artifactId>
+			<version>${amimini.version}</version>
+		</dependency>
+
+
+		<!--***************************************************************-->
+
+		<dependency>
+			<groupId>net.hep.ami</groupId>
+			<artifactId>AMIMiniServer</artifactId>
 			<version>${amimini.version}</version>
 		</dependency>
 
